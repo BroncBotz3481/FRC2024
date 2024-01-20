@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -45,6 +48,11 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+//    // Register Named Commands
+//    NamedCommands.registerCommand("autoBalance", swerve.autoBalanceCommand());
+//    NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+//    NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -119,6 +127,12 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand("New Path", true);
+
+//    // Load the path you want to follow using its name in the GUI
+//    PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
+//
+//    // Create a path following command using AutoBuilder. This will also trigger event markers.
+//    return AutoBuilder.followPathWithEvents(path);
   }
 
   public void setDriveMode()
