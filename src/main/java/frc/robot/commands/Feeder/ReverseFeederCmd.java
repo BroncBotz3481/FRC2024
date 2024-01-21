@@ -1,10 +1,10 @@
 package frc.robot.commands.Feeder;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
 
 
-public class ReverseFeederCmd extends CommandBase {
+public class ReverseFeederCmd extends Command {
     private final FeederSubsystem feederSubsystem;
 
     public ReverseFeederCmd(FeederSubsystem feederSubsystem) {

@@ -1,10 +1,10 @@
 package frc.robot.commands.Feeder;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
 
 
-public class RunFeederCmd extends CommandBase {
+public class RunFeederCmd extends Command {
     private final FeederSubsystem feederSubsystem;
 
     public RunFeederCmd(FeederSubsystem feederSubsystem) {
@@ -28,7 +28,7 @@ public class RunFeederCmd extends CommandBase {
      */
     @Override
     public void execute() {
-        feederSubsystem.runFeeder();
+        feederSubsystem.runFeeder(1);
     }
 
     /**

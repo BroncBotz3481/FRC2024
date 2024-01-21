@@ -37,7 +37,7 @@ public class IntakeSpinCmd extends CommandBase {
 //        } else { // If joystick is not being pushed significantly in Y direction
 //            intakeSubsystem.stop();
 //        }
-        intakeSubsystem.spin();
+//        intakeSubsystem.spin();
 
     }
 

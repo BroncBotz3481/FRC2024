@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.LED.LEDSubsystem;
@@ -29,8 +30,9 @@ public class RobotContainer {
   private final FeederSubsystem m_feeder = new FeederSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final LEDSubsystem m_LED = new LEDSubsystem();
-  public final Superstructure superstructure = new Superstructure(m_climber, m_feeder, m_intake, m_shooter, m_LED);
+  public final Superstructure superstructure = new Superstructure(m_climber, m_feeder, m_intake, m_shooter, m_elevator, m_LED);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);

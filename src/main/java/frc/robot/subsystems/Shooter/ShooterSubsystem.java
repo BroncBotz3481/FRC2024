@@ -1,23 +1,15 @@
 package frc.robot.subsystems.Shooter;
 
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj.DigitalInput;
-
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
-    private final SparkMaxPIDController PIDController;
+    private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
@@ -25,8 +17,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public ShooterSubsystem() {
-        leftShooter = new CANSparkMax(Constants.ShooterConstants.leftShooterID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftShooter = new CANSparkMax(Constants.ShooterConstants.leftShooterID, CANSparkLowLevel.MotorType.kBrushless);
+        rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkLowLevel.MotorType.kBrushless);
         leftShooter.restoreFactoryDefaults();
         rightShooter.restoreFactoryDefaults();
         leftShooter.follow(rightShooter);
@@ -80,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-    public void run(double power){
+    public void shoot(double power){
         rightShooter.set(power);;
     }
     public void stop() {
@@ -119,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return target_Speed;
     }
 
-    public CommandBase shootIt(double targetSpeed){
+    public Command shootIt(double targetSpeed){
         return run(() -> runPID(targetSpeed));
     }
 

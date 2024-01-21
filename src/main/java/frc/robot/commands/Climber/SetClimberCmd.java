@@ -1,10 +1,10 @@
 package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 
 
-public class SetClimberCmd extends CommandBase {
+public class SetClimberCmd extends Command {
     private final ClimberSubsystem climberSubsystem;
     private final double targetPosition;
 
@@ -21,7 +21,7 @@ public class SetClimberCmd extends CommandBase {
      */
     @Override
     public void initialize() {
-        climberSubsystem.setTargetPosition(targetPosition);
+//        climberSubsystem.setTargetPosition(targetPosition);
     }
 
     /**
@@ -30,7 +30,8 @@ public class SetClimberCmd extends CommandBase {
      */
     @Override
     public void execute() {
-        climberSubsystem.driveToTarget();
+
+//        climberSubsystem.driveToTarget();
     }
 
     /**
@@ -50,7 +51,8 @@ public class SetClimberCmd extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return climberSubsystem.atTargetPosition();
+//        return climberSubsystem.atTargetPosition();
+        return true;
     }
 
     /**

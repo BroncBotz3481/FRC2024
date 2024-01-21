@@ -1,7 +1,7 @@
 package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
@@ -40,17 +40,17 @@ public class SuperstructureToState extends SequentialCommandGroup {
         ElevatorSubsystem elevator = superstructure.m_elevator;
 
 
-        CommandBase initCmd = Commands.runOnce(() -> {
+        Command initCmd = Commands.runOnce(() -> {
             m_superstructure.updateState(m_targetState);
         });
 
         determineConditions();
 
-        CommandBase shooterCmd = Commands.waitUntil(m_shooterWait).andThen(superstructure.m_shooter.shootIt(m_targetState.shoot.speed).until(m_shooterUntil));
-        CommandBase feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.setSpeed(m_targetState.feed.power).until(m_feederUntil));
-        CommandBase elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
-        CommandBase intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).until(m_intakeUntil));
-        CommandBase climberCmd = Commands.waitUntil(m_climberWait).andThen(superstructure.m_climber.setHeight(m_targetState.climb.height)).until(m_climberUntil);
+        Command shooterCmd = Commands.waitUntil(m_shooterWait).andThen(superstructure.m_shooter.shootIt(m_targetState.shoot.speed).until(m_shooterUntil));
+        Command feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.setSpeed(m_targetState.feed.power).until(m_feederUntil));
+        Command elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
+        Command intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).until(m_intakeUntil));
+        Command climberCmd = Commands.waitUntil(m_climberWait).andThen(superstructure.m_climber.setHeight(m_targetState.climb.height)).until(m_climberUntil);
 
         addCommands(initCmd,
                 Commands.parallel(

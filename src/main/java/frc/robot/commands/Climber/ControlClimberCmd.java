@@ -1,12 +1,12 @@
 package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 
 import java.util.function.DoubleSupplier;
 
-public class ControlClimberCmd extends CommandBase {
+public class ControlClimberCmd extends Command {
     private final ClimberSubsystem climberSubsystem;
 
     private final DoubleSupplier powSupplier;

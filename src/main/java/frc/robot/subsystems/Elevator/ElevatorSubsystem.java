@@ -1,11 +1,11 @@
 package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
@@ -16,7 +16,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final CANSparkMax rightLift;
 
-    private final SparkMaxPIDController PIDController;
+    private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
     private final DigitalInput limitSwitchLATop;
@@ -24,8 +24,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public ElevatorSubsystem() {
-        leftLift = new CANSparkMax(Constants.FeederConstants.leftLiftID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightLift = new CANSparkMax(Constants.FeederConstants.rightLiftID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftLift = new CANSparkMax(Constants.FeederConstants.leftLiftID, CANSparkLowLevel.MotorType.kBrushless);
+        rightLift = new CANSparkMax(Constants.FeederConstants.rightLiftID, CANSparkLowLevel.MotorType.kBrushless);
         leftLift.restoreFactoryDefaults();
         rightLift.restoreFactoryDefaults();
         leftLift.follow(rightLift);
@@ -87,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         PIDController.setIZone(iz);
     }
 
-    public CommandBase setAngle(double degrees){
+    public Command setAngle(double degrees){
         return run(() -> {
             runPID(degrees);
         });

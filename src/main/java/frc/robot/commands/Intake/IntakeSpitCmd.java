@@ -37,7 +37,7 @@ public class IntakeSpitCmd extends CommandBase {
 //        } else {
 //            intakeSubsystem.stop();
 //        }
-        intakeSubsystem.spit();
+//        intakeSubsystem.spit();
     }
 
     /**
