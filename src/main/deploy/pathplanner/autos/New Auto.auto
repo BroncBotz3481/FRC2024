@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start POS 1 To AMP"
+            "pathName": "POS 1 To AMP"
           }
         },
         {
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp To Middle Note 1"
+            "pathName": "Amp To E1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Note 1 To Speaker Mid"
+            "pathName": "E1 To Speaker Score"
           }
         }
       ]
