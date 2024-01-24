@@ -2,11 +2,9 @@ package frc.robot.subsystems.Shooter;
 
 
 import com.revrobotics.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax leftShooter;
@@ -14,8 +12,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
-
-    //private final DoubleSolenoid intakePiston;
 
     private double target_Speed;
 
@@ -62,20 +58,6 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final double INTEGRAL_ZONE = 0.0;
     }
 
-    public enum ShooterState{
-        HIGHPOWER(100),
-        MIDPOWER(50),
-        LOWPOWER(25),
-        REVERSEDINTAKE(-10),
-        OFF(0);
-
-        public double speed;
-
-        private ShooterState(double speed){
-            this.speed = speed;
-        }
-    }
-
     public void shoot(double power){
         rightShooter.set(power);;
     }
@@ -98,19 +80,6 @@ public class ShooterSubsystem extends SubsystemBase {
         PIDController.setReference(targetSpeed, CANSparkMax.ControlType.kVelocity);
     }
 
-//    public void highPwr(){
-//        rightShooter.set(1.0);;
-//    }
-//    public void midPwr(){
-//        rightShooter.set(0.7);;
-//    }
-//    public void lowPwr(){
-//        rightShooter.set(0.4);;
-//    }
-//    public void reverse(){
-//        rightShooter.set(-0.2);;
-//    }
-
     public double getSpeed(){
         return target_Speed;
     }
@@ -119,6 +88,20 @@ public class ShooterSubsystem extends SubsystemBase {
         return run(() -> runPID(targetSpeed));
     }
 
+
+    public enum ShooterState{
+        HIGHPOWER(100),
+        MIDPOWER(50),
+        LOWPOWER(25),
+        REVERSEDINTAKE(-10),
+        OFF(0);
+
+        public double speed;
+
+        private ShooterState(double speed){
+            this.speed = speed;
+        }
+    }
 
     @Override
     public void periodic()

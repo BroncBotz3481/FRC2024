@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
@@ -38,9 +37,6 @@ public class RobotContainer {
                                                                   m_elevator,
                                                                   m_LED,
                                                                   SwerveSubsystem.getInstance());
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -62,7 +58,17 @@ public class RobotContainer {
     Constants.operatorController.y().whileTrue(superstructure.toState(SuperState.SCORE_AMP_SETUP));
     Constants.operatorController.x().whileTrue(superstructure.toState(SuperState.SCORE_STAGE_PROTECTED_SETUP));
     Constants.operatorController.b().whileTrue(superstructure.toState(SuperState.SCORE_SPEAKER_SETUP));
+    Constants.operatorController.a().whileTrue(superstructure.toState(SuperState.SAFE));
     Constants.operatorController.rightBumper().whileTrue(superstructure.toState(superstructure.getShootState()));
+    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
+    Constants.operatorController.leftTrigger().whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
+    new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
+            .whileTrue(m_elevator.runManual(Constants.operatorController::getLeftY));
+    Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-1));
+    Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(1));
+    Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-1));
+    Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(1));
+    Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
   }
 
   /**

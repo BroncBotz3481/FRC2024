@@ -2,13 +2,10 @@ package frc.robot.subsystems.Feeder;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
-import frc.robot.subsystems.Shooter.ShooterSubsystem;
 
 public class FeederSubsystem extends SubsystemBase {
 
@@ -49,11 +46,8 @@ public class FeederSubsystem extends SubsystemBase {
     }
 
 
-    public void runFeeder(double fPower) {
+    public void setSpeed(double fPower) {
         feederMotor.set(fPower);
-    }
-    public void reverse(double fPower) {
-        feederMotor.set(-fPower);
     }
 
     public void stopFeeder() {
@@ -84,9 +78,9 @@ public class FeederSubsystem extends SubsystemBase {
     }
 
 
-    public Command setSpeed(double targetSpeed){
+    public Command runFeeder(double targetSpeed){
         return run(()-> {
-            runFeeder(targetSpeed);
+            setSpeed(targetSpeed);
         });
     }
 

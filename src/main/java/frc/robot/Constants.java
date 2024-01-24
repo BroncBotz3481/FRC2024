@@ -16,10 +16,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  */
 public final class Constants {
   public static final CommandXboxController driverController =
-          new CommandXboxController(OperatorConstants.kDriverControllerPort);
+          new CommandXboxController(DriveteamConstants.kDriverControllerPort);
   public static final CommandXboxController operatorController =
-          new CommandXboxController(OperatorConstants.kOperatorControllerPort);
-  public static class OperatorConstants {
+          new CommandXboxController(DriveteamConstants.kOperatorControllerPort);
+
+  public static class DriveteamConstants {
     public static final int kDriverControllerPort = 0;
 
     public static final int kOperatorControllerPort = 1;
@@ -29,29 +30,40 @@ public final class Constants {
     public static final int leftClimberMotorID = 26;
     public static final int rightClimberMotorID = 27;
     public static final int lowerID = 38;
+
   }
   public static class FeederConstants {
-    public static final int leftLiftID = 0;
-    public static final int rightLiftID = 1;
     public static final int feederMotorID = 24;
+
     public static final int limitSwitchBeanBrakeChannel = 31;
 
-    public static final int limitSwitchLATop = 32;
-    public static final int limitSwitchLABottom = 33;
   }
 
   public static class IntakeConstants {
     public static final int intakeMotorID = 23;
     public static final int forwardChannelID = 24;
     public static final int reverseChannelID = 25;
+
   }
   public static class ShooterConstants {
     public static final int leftShooterID = 20;
     public static final int rightShooterID = 21;
+
   }
 
   public static class LEDConstants {
     public static final int port = 36;
     public static final int length = 27;
   }
+
+  public static class ElevatorConstants {
+
+    public static final int leftLiftID = 80;
+    public static final int rightLiftID = 81;
+
+    public static final int limitSwitchLATop = 32;
+    public static final int limitSwitchLABottom = 33;
+
+  }
+
 }

@@ -1,6 +1,5 @@
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -51,7 +50,7 @@ public class SuperstructureToState extends SequentialCommandGroup {
         determineConditions();
 
         Command shooterCmd = Commands.waitUntil(m_shooterWait).andThen(superstructure.m_shooter.shootIt(m_targetState.shoot.speed).until(m_shooterUntil));
-        Command feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.setSpeed(m_targetState.feed.power).until(m_feederUntil));
+        Command feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.runFeeder(m_targetState.feed.power).until(m_feederUntil));
         Command elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
         Command intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).andThen(superstructure.m_intake.runIntake(1)).until(m_intakeUntil));
         Command climberCmd = Commands.waitUntil(m_climberWait).andThen(superstructure.m_climber.setHeight(m_targetState.climb.height)).until(m_climberUntil);
@@ -97,13 +96,6 @@ public class SuperstructureToState extends SequentialCommandGroup {
             m_intakeWait = () -> true;
             m_feederWait = () -> (intake.getIntakePistonPosition() == IntakeSubsystem.intakePistonDownPosition);
             m_feederUntil = feeder::getBeamBrakeState;
-        }
-
-        if (m_targetState == SuperState.SAFE) {
-            m_feederWait = () -> true;
-            m_elevatorWait = () -> true;
-            m_intakeWait = () ->  true;
-            m_climberWait = () -> true;
         }
 
         if (m_targetState == SuperState.CLIMB_REACH) {

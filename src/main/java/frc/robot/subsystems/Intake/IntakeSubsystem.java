@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -30,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelID, Constants.IntakeConstants.reverseChannelID);
     }
 
-    public void run(double power){
+    public void intakeOrOuttake(double power){
         intakeMotor.set(power);
     }
     public void stop() {
@@ -69,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command runIntake(double power){
         return run(() -> {
-            run(power);
+            intakeOrOuttake(power);
         });
     }
 

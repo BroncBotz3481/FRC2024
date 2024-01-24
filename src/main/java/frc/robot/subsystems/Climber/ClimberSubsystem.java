@@ -3,16 +3,11 @@ package frc.robot.subsystems.Climber;
 
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkBase.IdleMode;
-import edu.wpi.first.wpilibj.DigitalInput;
-import java.time.Instant;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -37,8 +32,6 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberMotor.setInverted(true);
         leftClimberMotor.setIdleMode(IdleMode.kBrake);
         rightClimberMotor.setIdleMode(IdleMode.kBrake);
-        leftEncoder.setPosition(0.0);
-        rightEncoder.setPosition(0.0);
         rightEncoder = rightClimberMotor.getEncoder();
         leftEncoder = leftClimberMotor.getEncoder();
         lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.lowerID);
@@ -110,9 +103,16 @@ public class ClimberSubsystem extends SubsystemBase {
         PIDController.setReference(targetPosition, CANSparkBase.ControlType.kPosition);
     }
 
-    public Command setSpeed(double speed){
+    public Command setRightSpeed(double speed){
         return run(()-> {
             rightClimberMotor.set(speed);
+        });
+    }
+
+
+    public Command setLeftSpeed(double speed){
+        return run(()-> {
+            leftClimberMotor.set(speed);
         });
     }
 

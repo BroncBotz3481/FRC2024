@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Shooter.ShooterSubsystem;
+
+import java.util.function.DoubleSupplier;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -24,16 +25,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public ElevatorSubsystem() {
-        leftLift = new CANSparkMax(Constants.FeederConstants.leftLiftID, CANSparkLowLevel.MotorType.kBrushless);
-        rightLift = new CANSparkMax(Constants.FeederConstants.rightLiftID, CANSparkLowLevel.MotorType.kBrushless);
+        leftLift = new CANSparkMax(Constants.ElevatorConstants.leftLiftID, CANSparkLowLevel.MotorType.kBrushless);
+        rightLift = new CANSparkMax(Constants.ElevatorConstants.rightLiftID, CANSparkLowLevel.MotorType.kBrushless);
         leftLift.restoreFactoryDefaults();
         rightLift.restoreFactoryDefaults();
         leftLift.follow(rightLift);
         rightLift.setInverted(true);
         leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitchLATop = new DigitalInput(Constants.FeederConstants.limitSwitchLATop);
-        limitSwitchLABottom = new DigitalInput(Constants.FeederConstants.limitSwitchLABottom);
+        limitSwitchLATop = new DigitalInput(Constants.ElevatorConstants.limitSwitchLATop);
+        limitSwitchLABottom = new DigitalInput(Constants.ElevatorConstants.limitSwitchLABottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         PIDController = rightLift.getPIDController();
@@ -71,12 +72,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.set(liftPower);
     }
 
-
-    public void runPID(double targetPosition)
-    {
-        PIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    public void stop() {
+        rightLift.set(0);
     }
 
+    public double getAngle(){
+        return rightEncoder.getPosition()*360;
+    }
 
     public void set(double p, double i, double d, double f, double iz)
     {
@@ -87,9 +89,22 @@ public class ElevatorSubsystem extends SubsystemBase {
         PIDController.setIZone(iz);
     }
 
+    public void runPID(double targetPosition)
+    {
+        PIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+    }
+
+
     public Command setAngle(double degrees){
         return run(() -> {
             runPID(degrees);
+        });
+    }
+
+    public Command runManual(DoubleSupplier supplier){
+        double power = supplier.getAsDouble();
+        return run(() -> {
+            changeAngle(power);
         });
     }
 
@@ -105,23 +120,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
-    public double getAngle(){
-        return rightEncoder.getPosition()*360;
-    }
-
     @Override
     public void periodic() {
 
     }
-
-    public void stop() {
-        rightLift.set(0);
-    }
-
-    public void runRightMotor(double power) {
-        rightLift.set(power);
-    }
-
 
 }
 
