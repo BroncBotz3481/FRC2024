@@ -69,9 +69,9 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
@@ -103,14 +103,16 @@ public class SwerveSubsystem extends SubsystemBase
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                         new PIDConstants(0.01, 0.0, 0.0), //If you experience any
+                                         new PIDConstants(0.00023, 0.0000002, 1), //If you experience any
                                          // oscillation or erratic behavior try lowering "kP"
                                          // Translation PID constants
-                                         new PIDConstants(0.01, 0.0, 0.0),
+                                         new PIDConstants(swerveDrive.swerveController.config.headingPIDF.p,
+                                         swerveDrive.swerveController.config.headingPIDF.i,
+                                         swerveDrive.swerveController.config.headingPIDF.d),
                                          // Rotation PID constants
                                          4.5,
                                          // Max module speed, in m/s
-                                         0.4,
+                                         swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
                                          // Drive base radius in meters. Distance from robot center to furthest module.
                                          new ReplanningConfig()
                                          // Default path replanning config. See the API for the options here
