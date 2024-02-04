@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -55,25 +57,6 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the desired angle NOT angular rotation
-    Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX(),
-        () -> driverXbox.getRightY());
-
-    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRawAxis(2));
-
-    drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngle);
-
     // Build an auto chooser. This will use Commands.none() as the default option.
 //    autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -81,6 +64,11 @@ public class RobotContainer
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
 //    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  public void teleopInit()
+  {
+    
   }
 
   /**
@@ -113,10 +101,11 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // A Path will be run in autonomous
-    // return drivebase.getAutonomousCommand("TESTER", true);
+    //(null)
+    //  return drivebase.spinCounterClockwise();//drivebase.getAutonomousCommand("TESTER", true);
 
     // Runs an Auto
-    return new PathPlannerAuto("Simple Auto");
+     return new PathPlannerAuto("Simple Auto");
 
     // Gets Selected Auto from Shuffleboard
     // return autoChooser.getSelected();
@@ -125,6 +114,26 @@ public class RobotContainer
   public void setDriveMode()
   {
     //drivebase.setDefaultCommand();
+    
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+    // right stick controls the desired angle NOT angular rotation
+    Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRightX(),
+        () -> -driverXbox.getRightY());
+
+    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRawAxis(2));
+
+    drivebase.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngle);
+
   }
 
   public void setMotorBrake(boolean brake)

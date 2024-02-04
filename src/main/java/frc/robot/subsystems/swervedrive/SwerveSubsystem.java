@@ -20,6 +20,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -42,7 +43,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public        double      maximumSpeed = Units.feetToMeters(1);
+  public        double      maximumSpeed = Units.feetToMeters(14);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -79,6 +80,7 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
 
     setupPathPlanner();
+    swerveDrive.updateCacheValidityPeriods(20, 20, 20);
   }
 
   /**
@@ -106,11 +108,9 @@ public class SwerveSubsystem extends SubsystemBase
                                          new PIDConstants(5, 0, 0), //If you experience any
                                          // oscillation or erratic behavior try lowering "kP"
                                          // Translation PID constants
-                                         new PIDConstants(swerveDrive.swerveController.config.headingPIDF.p,
-                                         swerveDrive.swerveController.config.headingPIDF.i,
-                                         swerveDrive.swerveController.config.headingPIDF.d),
+                                         new PIDConstants(5,0,0),
                                          // Rotation PID constants
-                                         4.5,
+                                         2,
                                          // Max module speed, in m/s
                                          swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
                                          // Drive base radius in meters. Distance from robot center to furthest module.
@@ -148,6 +148,14 @@ public class SwerveSubsystem extends SubsystemBase
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     return AutoBuilder.followPath(path);
   }
+
+  // public Command spinCounterClockwise()
+  // {
+  //   return run(()->{
+  //         setChassisSpeeds(
+  //           new ChassisSpeeds(0,0,1)
+  //           );});
+  // }
 
   /**
    * Use PathPlanner Path finding to go to a point on the field.
