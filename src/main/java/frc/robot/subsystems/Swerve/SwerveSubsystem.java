@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,10 +21,11 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.io.File;
-import java.util.function.DoubleSupplier;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants.AutonConstants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
+import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -33,43 +33,48 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+import java.io.File;
+import java.util.function.DoubleSupplier;
+
 public class SwerveSubsystem extends SubsystemBase
 {
 
-  /**
-     * The Singleton instance of this swerevSubsystem. Code should use the {@link #getInstance()} method to get the single
-     * instance (rather than trying to construct an instance of this class.)
-     */
-    private static SwerveSubsystem INSTANCE;
 
-    /**
-     * Returns the Singleton instance of this swerevSubsystem. This static method should be used, rather than the
-     * constructor, to get the single instance of this class. For example: {@code swerevSubsystem.getInstance();}
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static SwerveSubsystem getInstance()
+  /**
+   * The Singleton instance of this swerevSubsystem. Code should use the {@link #getInstance()} method to get the single
+   * instance (rather than trying to construct an instance of this class.)
+   */
+  private static SwerveSubsystem INSTANCE;
+
+  /**
+   * Returns the Singleton instance of this swerevSubsystem. This static method should be used, rather than the
+   * constructor, to get the single instance of this class. For example: {@code swerevSubsystem.getInstance();}
+   */
+  @SuppressWarnings("WeakerAccess")
+  public static SwerveSubsystem getInstance()
+  {
+    if (INSTANCE == null)
     {
-        if (INSTANCE == null)
-        {
-            INSTANCE = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
-        }
-        return INSTANCE;
+      INSTANCE = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
     }
-    /**
+    return INSTANCE;
+  }
+
+  /**
    * Swerve drive object.
    */
   private final SwerveDrive swerveDrive;
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public        double      maximumSpeed = Units.feetToMeters(14.5);
+  public        double      maximumSpeed = Units.feetToMeters(14);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
    * @param directory Directory of swerve drive config files.
    */
-  public SwerveSubsystem(File directory)
+  private SwerveSubsystem(File directory)
   {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -89,16 +94,15 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
-
-    setupPathPlanner();
+    swerveDrive.updateCacheValidityPeriods(20, 20, 20);
   }
 
   /**
@@ -123,13 +127,11 @@ public class SwerveSubsystem extends SubsystemBase
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                                         new PIDConstants(5.0, 0.0, 0.0),
+                                          AutonConstants.TRANSLATION_PID,
                                          // Translation PID constants
-                                         new PIDConstants(swerveDrive.swerveController.config.headingPIDF.p,
-                                                          swerveDrive.swerveController.config.headingPIDF.i,
-                                                          swerveDrive.swerveController.config.headingPIDF.d),
+                                          AutonConstants.ANGLE_PID,
                                          // Rotation PID constants
-                                         4.5,
+                                         2,
                                          // Max module speed, in m/s
                                          swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
                                          // Drive base radius in meters. Distance from robot center to furthest module.
@@ -167,6 +169,14 @@ public class SwerveSubsystem extends SubsystemBase
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     return AutoBuilder.followPath(path);
   }
+
+  // public Command spinCounterClockwise()
+  // {
+  //   return run(()->{
+  //         setChassisSpeeds(
+  //           new ChassisSpeeds(0,0,1)
+  //           );});
+  // }
 
   /**
    * Use PathPlanner Path finding to go to a point on the field.
@@ -210,7 +220,7 @@ public class SwerveSubsystem extends SubsystemBase
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
-                                                                      swerveDrive.getYaw().getRadians(),
+                                                                      swerveDrive.getOdometryHeading().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
     });
   }
@@ -231,10 +241,34 @@ public class SwerveSubsystem extends SubsystemBase
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
                                                                       translationY.getAsDouble(),
                                                                       rotation.getAsDouble() * Math.PI,
-                                                                      swerveDrive.getYaw().getRadians(),
+                                                                      swerveDrive.getOdometryHeading().getRadians(),
                                                                       swerveDrive.getMaximumVelocity()));
     });
   }
+  
+/**
+   * Command to characterize the robot drive motors using SysId
+   * @return SysId Drive Command
+   */
+  public Command sysIdDriveMotorCommand() {
+    return SwerveDriveTest.generateSysIdCommand(
+          SwerveDriveTest.setDriveSysIdRoutine(
+              new Config(),
+              this, swerveDrive, 12),
+          3.0, 5.0, 3.0);
+}
+
+/**
+ * Command to characterize the robot angle motors using SysId
+ * @return SysId Angle Command
+ */
+public Command sysIdAngleMotorCommand() {
+    return SwerveDriveTest.generateSysIdCommand(
+          SwerveDriveTest.setAngleSysIdRoutine(
+              new Config(),
+              this, swerveDrive),
+          3.0, 5.0, 3.0);
+}
 
   /**
    * Command to drive the robot using translative values and heading as angular velocity.
