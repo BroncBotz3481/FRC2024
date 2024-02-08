@@ -84,6 +84,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return target_Speed;
     }
 
+    public double getPower(){
+       return rightShooter.get();
+    }
+
     public Command shootIt(double targetSpeed){
         return run(() -> runPID(targetSpeed));
     }
@@ -106,6 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
+        System.out.println("This is the speed of the shooter: " + getPower());
         //encoderVelocity = shooterMotorRight.getSelectedSensorVelocity(pidIdx.PRIMARY.ordinal());
     }
 

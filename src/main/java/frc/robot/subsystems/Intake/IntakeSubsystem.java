@@ -36,6 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.set(0);
     }
 
+    public double getSpeed(){
+        return intakeMotor.get();
+    }
+
     public enum IntakeState{
         RETRACTED(intakePistonDownPosition),
         EXTENDED(intakePistonUpPosition);
@@ -79,6 +83,8 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
+        System.out.println("This the position of the intake: " + getIntakePistonPosition());
+        System.out.println("This is the power of the intake: " + getSpeed());
 
     }
 }

@@ -86,7 +86,8 @@ public class FeederSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        System.out.println("This the power of the feeder: " + getSpeed());
+        System.out.println("This is the state of the beam brake: " + getBeamBrakeState());
     }
 
 }

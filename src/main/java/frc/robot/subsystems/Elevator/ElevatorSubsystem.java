@@ -122,7 +122,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        System.out.println("This is the angle of the elevator: " + getAngle());
     }
 
 }

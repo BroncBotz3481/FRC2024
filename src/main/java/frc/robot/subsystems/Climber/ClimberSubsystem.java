@@ -126,6 +126,8 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
+        System.out.println("This is the height of the climber: " + getHeight());
+        
 
     }
 }
