@@ -86,7 +86,7 @@ public class SwerveSubsystem extends SubsystemBase
       throw new RuntimeException(e);
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
-    swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
+    
     setupPathPlanner();
 //    swerveDrive.updateCacheValidityPeriods(20, 20, 20);
   }
@@ -211,7 +211,7 @@ public class SwerveSubsystem extends SubsystemBase
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
       double xInput = translationX.getAsDouble(); // Smooth controll out
-      double yInput = filter.calculate(translationY.getAsDouble()); // Smooth controll out
+      double yInput = translationY.getAsDouble(); // Smooth controll out
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
                                                                       headingX.getAsDouble(),
