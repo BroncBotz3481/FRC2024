@@ -62,20 +62,20 @@ public final class Constants {
   public static class ClimberConstants {
     public static final int leftClimberMotorID = 26;
     public static final int rightClimberMotorID = 27;
-    public static final int lowerID = 38;
+    public static final int lowerID = 5;
 
   }
   public static class FeederConstants {
     public static final int feederMotorID = 24;
 
-    public static final int limitSwitchBeanBrakeChannel = 31;
+    public static final int limitSwitchBeanBrakeChannel = 3;
 
   }
 
   public static class IntakeConstants {
     public static final int intakeMotorID = 23;
-    public static final int forwardChannelID = 24;
-    public static final int reverseChannelID = 25;
+    public static final int forwardChannelID = 1;
+    public static final int reverseChannelID = 2;
 
   }
   public static class ShooterConstants {
@@ -94,8 +94,8 @@ public final class Constants {
     public static final int leftLiftID = 80;
     public static final int rightLiftID = 81;
 
-    public static final int limitSwitchLATop = 32;
-    public static final int limitSwitchLABottom = 33;
+    public static final int limitSwitchLATop = 6;
+    public static final int limitSwitchLABottom = 7;
 
   }
 

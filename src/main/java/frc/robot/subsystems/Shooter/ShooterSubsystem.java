@@ -110,7 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-        System.out.println("This is the speed of the shooter: " + getPower());
+        System.out.println("This is the speed of the shooter: " + getSpeed());
         //encoderVelocity = shooterMotorRight.getSelectedSensorVelocity(pidIdx.PRIMARY.ordinal());
     }
 

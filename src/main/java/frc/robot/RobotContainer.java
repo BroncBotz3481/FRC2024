@@ -50,7 +50,7 @@ public class RobotContainer {
 
   private final SwerveSubsystem m_drivebase = SwerveSubsystem.getInstance();
 
-  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<Command> autoChooser;
   public final Superstructure superstructure = new Superstructure(m_climber,
                                                                   m_feeder,
                                                                   m_intake,
@@ -61,8 +61,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
-    Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
+    //autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
+    //Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
     configurePathPlanner();
     configureBindings(); // Configure the trigger bindings
   }
@@ -124,7 +124,8 @@ public class RobotContainer {
 //    return new PathPlannerAuto("Simple Auto");
 
     // Gets Selected Auto from Shuffleboard
-     return autoChooser.getSelected();
+    // return autoChooser.getSelected();
+    return null;
   }
 
   public void setDriveMode()
