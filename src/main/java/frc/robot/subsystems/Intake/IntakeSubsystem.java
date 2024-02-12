@@ -41,13 +41,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public enum IntakeState{
-        RETRACTED(intakePistonDownPosition),
-        EXTENDED(intakePistonUpPosition);
+        RETRACTED(intakePistonDownPosition,0),
+        EXTENDED(intakePistonUpPosition,1);
 
         public DoubleSolenoid.Value position;
+        public double power;
 
-        private IntakeState(DoubleSolenoid.Value position){
+        private IntakeState(DoubleSolenoid.Value position, double power){
             this.position = position;
+            this.power = power;
         }
 
     }

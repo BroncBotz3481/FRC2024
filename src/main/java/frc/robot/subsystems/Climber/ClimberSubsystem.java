@@ -17,6 +17,8 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax rightClimberMotor;
     private final CANSparkMax leftClimberMotor;
 
+    private double targetHeight;
+
     private final SparkPIDController PIDController;
     private RelativeEncoder       rightEncoder;
     private RelativeEncoder       leftEncoder;
@@ -100,6 +102,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void runPID(double targetPosition)
     {
+        targetHeight = targetPosition;
         PIDController.setReference(targetPosition, CANSparkBase.ControlType.kPosition);
     }
 
@@ -126,7 +129,7 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-        System.out.println("This is the height of the climber: " + getHeight());
+        System.out.println("This is the height of the climber: " + targetHeight);
         
 
     }

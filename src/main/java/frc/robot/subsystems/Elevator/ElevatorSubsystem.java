@@ -17,6 +17,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final CANSparkMax rightLift;
 
+    private double targetAngle;
+
     private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
@@ -96,6 +98,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public Command setAngle(double degrees){
+        targetAngle = degrees;
         return run(() -> {
             runPID(degrees);
         });
@@ -122,7 +125,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("This is the angle of the elevator: " + getAngle());
+        System.out.println("This is the angle of the elevator: " + targetAngle);
     }
 
 }
