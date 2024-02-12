@@ -20,11 +20,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final DoubleSolenoid.Value intakePistonUpPosition = Value.kForward;
 
+    public double power;
+
 
     public IntakeSubsystem() {
         intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.restoreFactoryDefaults();
-        intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelID, Constants.IntakeConstants.reverseChannelID);
     }
