@@ -81,6 +81,7 @@ public class RobotContainer {
     Constants.operatorController.x().whileTrue(superstructure.toState(SuperState.SCORE_STAGE_PROTECTED_SETUP));
     Constants.operatorController.b().whileTrue(superstructure.toState(SuperState.SCORE_SPEAKER_SETUP));
     Constants.operatorController.a().whileTrue(superstructure.toState(SuperState.SAFE));
+  
     Constants.operatorController.rightBumper().whileTrue(superstructure.toState(superstructure.getShootState()));
     Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
     Constants.operatorController.leftTrigger().whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));

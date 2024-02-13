@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class IntakeSubsystem extends SubsystemBase {
 
     private final CANSparkMax intakeMotor;
+    
+    private final CANSparkMax insideMotor;
 
     private final DoubleSolenoid intakePiston;
 
@@ -20,14 +22,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final DoubleSolenoid.Value intakePistonUpPosition = Value.kForward;
 
-    public double power;
-
 
     public IntakeSubsystem() {
         intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.restoreFactoryDefaults();
         intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeMotor.setInverted(false);
+        insideMotor = new CANSparkMax(Constants.IntakeConstants.insideMotorID, CANSparkLowLevel.MotorType.kBrushless);
+        insideMotor.restoreFactoryDefaults();
+        insideMotor.follow(intakeMotor);
+        insideMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        insideMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelID, Constants.IntakeConstants.reverseChannelID);
     }
 
