@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final CANSparkMax intakeMotor;
+    private final CANSparkMax intakeMotorLeft;
+
+    private final CANSparkMax intakeMotorRight;
     
-    private final CANSparkMax insideMotor;
+    private final CANSparkMax centerMotor;
 
     private final DoubleSolenoid intakePiston;
 
@@ -24,27 +26,32 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public IntakeSubsystem() {
-        intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, CANSparkLowLevel.MotorType.kBrushless);
-        intakeMotor.restoreFactoryDefaults();
-        intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        intakeMotor.setInverted(false);
-        insideMotor = new CANSparkMax(Constants.IntakeConstants.insideMotorID, CANSparkLowLevel.MotorType.kBrushless);
-        insideMotor.restoreFactoryDefaults();
-        insideMotor.follow(intakeMotor);
-        insideMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        insideMotor.setInverted(false);
+        intakeMotorLeft = new CANSparkMax(Constants.IntakeConstants.intakeMotorLeftID, CANSparkLowLevel.MotorType.kBrushless);
+        intakeMotorLeft.restoreFactoryDefaults();
+        intakeMotorLeft.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        intakeMotorLeft.setInverted(false);
+        intakeMotorRight = new CANSparkMax(Constants.IntakeConstants.intakeMotorRightID, CANSparkLowLevel.MotorType.kBrushless);
+        intakeMotorRight.restoreFactoryDefaults();
+        intakeMotorRight.follow(intakeMotorLeft);
+        intakeMotorRight.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        intakeMotorRight.setInverted(false);
+        centerMotor = new CANSparkMax(Constants.IntakeConstants.centerMotorID, CANSparkLowLevel.MotorType.kBrushless);
+        centerMotor.restoreFactoryDefaults();
+        centerMotor.follow(intakeMotorLeft);
+        centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        centerMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelID, Constants.IntakeConstants.reverseChannelID);
     }
 
     public void intakeOrOuttake(double power){
-        intakeMotor.set(power);
+        intakeMotorLeft.set(power);
     }
     public void stop() {
-        intakeMotor.set(0);
+        intakeMotorLeft.set(0);
     }
 
     public double getSpeed(){
-        return intakeMotor.get();
+        return intakeMotorLeft.get();
     }
 
     public enum IntakeState{
