@@ -5,10 +5,13 @@
 package frc.robot.subsystems.Swerve;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +26,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.AutonConstants;
+import java.io.File;
+import java.util.function.DoubleSupplier;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -33,26 +40,20 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-import java.io.File;
-import java.util.function.DoubleSupplier;
-
 public class SwerveSubsystem extends SubsystemBase
 {
 
-
   /**
-   * The Singleton instance of this swerevSubsystem. Code should use the {@link #getInstance()} method to get the single
-   * instance (rather than trying to construct an instance of this class.)
+   * Swerve drive object.
    */
-  private static SwerveSubsystem INSTANCE;
-
+  private final SwerveDrive swerveDrive;
+  private static SwerveSubsystem INSTANCE = null;
   /**
-   * Returns the Singleton instance of this swerevSubsystem. This static method should be used, rather than the
-   * constructor, to get the single instance of this class. For example: {@code swerevSubsystem.getInstance();}
+   * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  @SuppressWarnings("WeakerAccess")
-  public static SwerveSubsystem getInstance()
-  {
+  public        double      maximumSpeed = Units.feetToMeters(14);
+
+  public static SwerveSubsystem getInstance() {
     if (INSTANCE == null)
     {
       INSTANCE = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
@@ -60,14 +61,7 @@ public class SwerveSubsystem extends SubsystemBase
     return INSTANCE;
   }
 
-  /**
-   * Swerve drive object.
-   */
-  private final SwerveDrive swerveDrive;
-  /**
-   * Maximum speed of the robot in meters per second, used to limit acceleration.
-   */
-  public        double      maximumSpeed = Units.feetToMeters(14);
+  private SlewRateLimiter filter = new SlewRateLimiter(0.5);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -101,8 +95,10 @@ public class SwerveSubsystem extends SubsystemBase
     {
       throw new RuntimeException(e);
     }
-    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
-    swerveDrive.updateCacheValidityPeriods(20, 20, 20);
+    swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
+    
+    setupPathPlanner();
+//    swerveDrive.updateCacheValidityPeriods(20, 20, 20);
   }
 
   /**
@@ -131,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase
                                          // Translation PID constants
                                           AutonConstants.ANGLE_PID,
                                          // Rotation PID constants
-                                         2,
+                                         4.5,
                                          // Max module speed, in m/s
                                          swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
                                          // Drive base radius in meters. Distance from robot center to furthest module.
@@ -150,24 +146,34 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   /**
+   * Aim the robot at the target returned by PhotonVision.
+   *
+   * @param camera {@link PhotonCamera} to communicate with.
+   * @return A {@link Command} which will run the alignment.
+   */
+  public Command aimAtTarget(PhotonCamera camera) {
+    return run(() -> {
+      PhotonPipelineResult result = camera.getLatestResult();
+      if (result.hasTargets()) {
+        drive(getTargetSpeeds(0,
+                0,
+                Rotation2d.fromDegrees(result.getBestTarget()
+                        .getYaw()))); // Not sure if this will work, more math may be required.
+      }
+    });
+  }
+
+  /**
    * Get the path follower with events.
    *
    * @param pathName       PathPlanner path name.
-   * @param setOdomToStart Set the odometry position to the start of the path.
    * @return {@link AutoBuilder#followPath(PathPlannerPath)} path command.
    */
-  public Command getAutonomousCommand(String pathName, boolean setOdomToStart)
+  public Command getAutonomousCommand(String pathName)
   {
-    // Load the path you want to follow using its name in the GUI
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-    if (setOdomToStart)
-    {
-      resetOdometry(new Pose2d(path.getPoint(0).position, getHeading()));
-    }
 
     // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return AutoBuilder.followPath(path);
+    return new PathPlannerAuto(pathName);
   }
 
   // public Command spinCounterClockwise()
@@ -214,8 +220,8 @@ public class SwerveSubsystem extends SubsystemBase
   {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
-      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
-      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+      double xInput = translationX.getAsDouble(); // Smooth controll out
+      double yInput = translationY.getAsDouble(); // Smooth controll out
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
                                                                       headingX.getAsDouble(),
@@ -282,9 +288,9 @@ public Command sysIdAngleMotorCommand() {
   {
     return run(() -> {
       // Make the robot move
-      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+      swerveDrive.drive(new Translation2d(translationX.getAsDouble() * swerveDrive.getMaximumVelocity(),
+                                          translationY.getAsDouble() * swerveDrive.getMaximumVelocity()),
+                      angularRotationX.getAsDouble() * swerveDrive.getMaximumAngularVelocity(),
                         true,
                         false);
     });
@@ -435,8 +441,8 @@ public Command sysIdAngleMotorCommand() {
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY)
   {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = xInput;
+    yInput = yInput;
     return swerveDrive.swerveController.getTargetSpeeds(xInput,
                                                         yInput,
                                                         headingX,
@@ -456,8 +462,8 @@ public Command sysIdAngleMotorCommand() {
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
   {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = xInput;
+    yInput = yInput;
     return swerveDrive.swerveController.getTargetSpeeds(xInput,
                                                         yInput,
                                                         angle.getRadians(),

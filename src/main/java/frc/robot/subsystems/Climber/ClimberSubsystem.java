@@ -20,6 +20,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private double targetHeight;
 
     private final SparkPIDController PIDController;
+
     private RelativeEncoder       rightEncoder;
     private RelativeEncoder       leftEncoder;
     private final DigitalInput lowerLimitSwitch;
@@ -129,9 +130,7 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-        System.out.println("This is the height of the climber: " + targetHeight);
-        
-
+        //System.out.println("This is the height of the climber: " + targetHeight);
     }
 }
 

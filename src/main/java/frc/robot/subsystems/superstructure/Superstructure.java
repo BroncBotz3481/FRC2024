@@ -39,7 +39,7 @@ public class Superstructure {
         m_feeder.setDefaultCommand(m_feeder.runFeeder(FeederSubsystem.FeederState.OFF.power));
         m_intake.setDefaultCommand(m_intake.positionIntake(IntakeSubsystem.IntakeState.RETRACTED.position));
         m_shooter.setDefaultCommand(m_shooter.shootIt(ShooterSubsystem.ShooterState.OFF.speed));
-        m_elevator.setDefaultCommand(m_elevator.setAngle(ElevatorSubsystem.ElevatorState.MINANGLE.angle));
+        m_elevator.setDefaultCommand(m_elevator.setAngle(ElevatorSubsystem.ElevatorState.MAXANGLE.angle));
     }
 
     public Command toState(SuperState state){

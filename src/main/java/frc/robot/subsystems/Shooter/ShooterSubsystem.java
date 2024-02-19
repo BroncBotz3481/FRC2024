@@ -10,6 +10,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
     private final SparkPIDController PIDController;
+
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
@@ -110,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-        System.out.println("This is the speed of the shooter: " + getSpeed());
+        //System.out.println("This is the speed of the shooter: " + getSpeed());
         //encoderVelocity = shooterMotorRight.getSelectedSensorVelocity(pidIdx.PRIMARY.ordinal());
     }
 

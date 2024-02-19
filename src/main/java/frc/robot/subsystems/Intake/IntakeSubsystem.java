@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
         centerMotor.follow(intakeMotorLeft);
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         centerMotor.setInverted(false);
-        intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelID, Constants.IntakeConstants.reverseChannelID);
+        intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelPort, Constants.IntakeConstants.reverseChannelPort);
     }
 
     public void intakeOrOuttake(double power){
@@ -99,8 +99,8 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-        System.out.println("This the position of the intake: " + getIntakePistonPosition());
-        System.out.println("This is the power of the intake: " + getSpeed());
+        //System.out.println("This the position of the intake: " + getIntakePistonPosition());
+        //System.out.println("This is the power of the intake: " + getSpeed());
 
     }
 }

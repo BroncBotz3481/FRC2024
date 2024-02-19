@@ -4,16 +4,16 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.LED.LEDSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.superstructure.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,15 +23,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OperatorConstants;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import java.io.File;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,7 +45,7 @@ public class RobotContainer {
 
   private final SwerveSubsystem m_drivebase = SwerveSubsystem.getInstance();
 
-  //private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
   public final Superstructure superstructure = new Superstructure(m_climber,
                                                                   m_feeder,
                                                                   m_intake,
@@ -61,8 +56,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    //autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
-    //Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
+    autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
+    Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
     configurePathPlanner();
     configureBindings(); // Configure the trigger bindings
   }
@@ -124,9 +119,9 @@ public class RobotContainer {
     // Runs an Auto
 //    return new PathPlannerAuto("Simple Auto");
 
-    // Gets Selected Auto from Shuffleboard
-    // return autoChooser.getSelected();
-    return null;
+//    Gets Selected Auto from Shuffleboard
+    return autoChooser.getSelected();
+//    return null;
   }
 
   public void setDriveMode()
