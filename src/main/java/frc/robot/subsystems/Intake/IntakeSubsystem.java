@@ -97,7 +97,13 @@ public class IntakeSubsystem extends SubsystemBase {
             drop();
             intakeOrOuttake(0.5);
         });
+    }
 
+    public Command stopIntaking(){
+         return run(() -> {
+            raise();
+            intakeOrOuttake(0);
+        });
     }
 
     public DoubleSolenoid.Value getIntakePistonPosition(){

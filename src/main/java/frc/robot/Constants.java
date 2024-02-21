@@ -99,8 +99,11 @@ public final class Constants {
     public static final int leftLiftID = 32;
     public static final int rightLiftID = 33;
 
-    public static final int limitSwitchTop = 6;
-    public static final int limitSwitchBottom = 7;
+    public static final int leftLimitSwitchTop = 6;
+    public static final int leftLimitSwitchBottom = 5;
+
+   // public static final int rightLimitSwitchTop = 9;
+  // public static final int rightLimitSwitchBottom = 10;
 
   }
 

@@ -84,15 +84,18 @@ public class RobotContainer {
     // Manual controls
     new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
             .whileTrue(m_elevator.runManual(Constants.operatorController::getLeftY));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.shootIt(2000),m_feeder.runFeeder(0.5)));
-    Constants.operatorController.leftBumper().whileTrue(m_intake.manualIntake());
-    Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_shooter.shootIt(-500),m_feeder.runFeeder(-0.5)));
+    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
+    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(-0.5));
+    Constants.operatorController.rightBumper().whileTrue(m_shooter.manualShoot(0.5));
+    Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
+    Constants.operatorController.rightTrigger(0.1).whileTrue(m_intake.stopIntaking());
+    Constants.operatorController.leftBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.5),m_feeder.runFeeder(-0.5)));
 
 
-    Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-1));
-    Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(1));
-    Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-1));
-    Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(1));
+    Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-0.3));
+    Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(0.3));
+    Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-0.3));
+    Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(0.3));
     //Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
 
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure

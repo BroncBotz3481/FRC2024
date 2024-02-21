@@ -20,8 +20,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
-    private final DigitalInput limitSwitchTop;
-    private final DigitalInput limitSwitchBottom;
+
+    private final DigitalInput leftLimitSwitchTop;
+    private final DigitalInput leftLimitSwitchBottom;
+
+   // private final DigitalInput rightLimitSwitchTop;
+// private final DigitalInput rightLimitSwitchBottom;
 
     private double targetAngle;
 
@@ -35,8 +39,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.setInverted(true);
         leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitchTop = new DigitalInput(Constants.ElevatorConstants.limitSwitchTop);
-        limitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.limitSwitchBottom);
+        leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
+        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         PIDController = rightLift.getPIDController();
@@ -107,7 +111,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public Command runManual(DoubleSupplier supplier){
         double power = supplier.getAsDouble();
         return run(() -> {
-            changeAngle(power);
+            changeAngle(power*0.3);
         });
     }
 
