@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
@@ -72,22 +73,27 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    Constants.operatorController.y().whileTrue(superstructure.toState(SuperState.SCORE_AMP_SETUP));
-    Constants.operatorController.x().whileTrue(superstructure.toState(SuperState.SCORE_STAGE_PROTECTED_SETUP));
-    Constants.operatorController.b().whileTrue(superstructure.toState(SuperState.SCORE_SPEAKER_SETUP));
-    Constants.operatorController.a().whileTrue(superstructure.toState(SuperState.SAFE));
+//    Constants.operatorController.y().whileTrue(superstructure.toState(SuperState.SCORE_AMP_SETUP));
+//    Constants.operatorController.x().whileTrue(superstructure.toState(SuperState.SCORE_STAGE_PROTECTED_SETUP));
+//    Constants.operatorController.b().whileTrue(superstructure.toState(SuperState.SCORE_SPEAKER_SETUP));
+//    Constants.operatorController.a().whileTrue(superstructure.toState(SuperState.SAFE));
   
-    Constants.operatorController.rightBumper().whileTrue(superstructure.toState(superstructure.getShootState()));
-    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
-    Constants.operatorController.leftTrigger().whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
+//    Constants.operatorController.rightBumper().whileTrue(superstructure.toState(superstructure.getShootState()));
+//    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
+//    Constants.operatorController.leftTrigger(0.1).whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
     // Manual controls
     new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
             .whileTrue(m_elevator.runManual(Constants.operatorController::getLeftY));
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.shootIt(2000),m_feeder.runFeeder(0.5)));
+    Constants.operatorController.leftBumper().whileTrue(m_intake.manualIntake());
+    Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_shooter.shootIt(-500),m_feeder.runFeeder(-0.5)));
+
+
     Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-1));
     Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(1));
     Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-1));
     Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(1));
-    Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
+    //Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
 
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure
     Constants.driverController.a().onTrue(new InstantCommand(m_drivebase::zeroGyro));

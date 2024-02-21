@@ -11,40 +11,15 @@ public class FeederSubsystem extends SubsystemBase {
 
     private final CANSparkMax feederMotor;
 
-    private final DigitalInput limitSwitchBeamBrake;
+    private final DigitalInput beamBrake;
 
 
     public FeederSubsystem() {
         feederMotor = new CANSparkMax(Constants.FeederConstants.feederMotorID, CANSparkLowLevel.MotorType.kBrushless);
         feederMotor.restoreFactoryDefaults();
         feederMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitchBeamBrake = new DigitalInput(Constants.FeederConstants.limitSwitchBeanBrakeChannel);
+        beamBrake = new DigitalInput(Constants.FeederConstants.beamBrakeChannel);
     }
-
-    public static class PIDF {
-
-        /**
-         * Feedforward constant for PID loop
-         */
-        public static final double FEEDFORWARD = 0.01;
-        /**
-         * Proportion constant for PID loop
-         */
-        public static final double PROPORTION = 0.05;
-        /**
-         * Integral constant for PID loop
-         */
-        public static final double INTEGRAL = 0.0;
-        /**
-         * Derivative constant for PID loop
-         */
-        public static final double DERIVATIVE = 0.0;
-        /**
-         * Integral zone constant for PID loop
-         */
-        public static final double INTEGRAL_ZONE = 0.0;
-    }
-
 
     public void setSpeed(double fPower) {
         feederMotor.set(fPower);
@@ -56,9 +31,9 @@ public class FeederSubsystem extends SubsystemBase {
 
     public enum FeederState {
 
-        FORWARD(1),
+        FORWARD(0.5),
         OFF(0),
-        REVERSE(-1);
+        REVERSE(-0.5);
 
        public double power;
 
@@ -74,7 +49,7 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public boolean getBeamBrakeState(){
-        return limitSwitchBeamBrake.get();
+        return beamBrake.get();
     }
 
 

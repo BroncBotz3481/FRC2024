@@ -17,9 +17,13 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax rightClimberMotor;
     private final CANSparkMax leftClimberMotor;
 
-    private double targetHeight;
+    private final SparkPIDController leftPIDController;
 
-    private final SparkPIDController PIDController;
+    private final SparkPIDController rightPIDController;
+
+    private double leftTargetHeight;
+
+    private double rightTargetHeight;
 
     private RelativeEncoder       rightEncoder;
     private RelativeEncoder       leftEncoder;
@@ -31,13 +35,56 @@ public class ClimberSubsystem extends SubsystemBase {
         rightClimberMotor = new CANSparkMax(Constants.ClimberConstants.rightClimberMotorID, MotorType.kBrushless);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
-        PIDController = rightClimberMotor.getPIDController();
         leftClimberMotor.setInverted(true);
         leftClimberMotor.setIdleMode(IdleMode.kBrake);
         rightClimberMotor.setIdleMode(IdleMode.kBrake);
         rightEncoder = rightClimberMotor.getEncoder();
         leftEncoder = leftClimberMotor.getEncoder();
+        leftPIDController = leftClimberMotor.getPIDController();
+        rightPIDController = rightClimberMotor.getPIDController();
+        leftPIDController.setFeedbackDevice(leftEncoder);
+        rightPIDController.setFeedbackDevice(rightEncoder);
         lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.lowerID);
+        set(ClimberSubsystem.PIDF.PROPORTION, ClimberSubsystem.PIDF.INTEGRAL, ClimberSubsystem.PIDF.DERIVATIVE,
+                ClimberSubsystem.PIDF.FEEDFORWARD, ClimberSubsystem.PIDF.INTEGRAL_ZONE);
+    }
+
+    public static class PIDF {
+
+        /**
+         * Feedforward constant for PID loop
+         */
+        public static final double FEEDFORWARD = 0;
+        /**
+         * Proportion constant for PID loop
+         */
+        public static final double PROPORTION = 0;
+        /**
+         * Integral constant for PID loop
+         */
+        public static final double INTEGRAL = 0;
+        /**
+         * Derivative constant for PID loop
+         */
+        public static final double DERIVATIVE = 0;
+        /**
+         * Integral zone constant for PID loop
+         */
+        public static final double INTEGRAL_ZONE = 0;
+    }
+
+    public void set(double p, double i, double d, double f, double iz)
+    {
+        leftPIDController.setP(p);
+        leftPIDController.setI(i);
+        leftPIDController.setD(d);
+        leftPIDController.setFF(f);
+        leftPIDController.setIZone(iz);
+        rightPIDController.setP(p);
+        rightPIDController.setI(i);
+        rightPIDController.setD(d);
+        rightPIDController.setFF(f);
+        rightPIDController.setIZone(iz);
     }
 
     public void runRightMotor(double power) {
@@ -48,7 +95,7 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberMotor.set(power);
     }
 
-    public void run(double power){
+    public void runBothClimbers(double power){
         rightClimberMotor.set(power);
         leftClimberMotor.set(power);
     }
@@ -61,10 +108,21 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberMotor.set(0);
     }
 
-    public void stop(){
+    public void stopBothClimbers(){
         rightClimberMotor.set(0);
         leftClimberMotor.set(0);
     }
+
+    public void runPIDLeft(double height){
+        leftTargetHeight = height;
+        leftPIDController.setReference(height, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void runPIDRight(double height){
+        rightTargetHeight = height;
+        rightPIDController.setReference(height, CANSparkMax.ControlType.kPosition);
+    }
+
 
     // Adds getter methods for the encoders
     public double getLeftEncoderPosition(){
@@ -75,37 +133,46 @@ public class ClimberSubsystem extends SubsystemBase {
         return rightEncoder.getPosition();
     }
 
-    public double getHeight(){
-        return rightEncoder.getPosition();
-    }
-
     public enum ClimberState {
+
+//        REST(0,0),
+//
+//        LEFTRUN(1,0),
+//
+//        RIGHTRUN(0,1),
+//
+//        LEFTRETRACT(-1,0),
+//
+//        RIGHTRETRACT(0,-1);
+
         RETRACTED(0),
         EXTENDED(100);
 
         public double height;
 
+//        public double leftPower;
+//
+//        public double rightPower;
+
+//        private ClimberState(double leftPower, double rightPower){
+//            this.leftPower = leftPower;
+//            this.rightPower = rightPower;
+//        }
+
         private ClimberState(double height){
             this.height = height;
         }
 
+    }
+
+    public Command setHeight(double height){
+        return run(()-> {
+            runPIDLeft(height);
+            runPIDRight(height);
+        });
 
     }
 
-    public void set(double p, double i, double d, double f, double iz)
-    {
-        PIDController.setP(p);
-        PIDController.setI(i);
-        PIDController.setD(d);
-        PIDController.setFF(f);
-        PIDController.setIZone(iz);
-    }
-
-    public void runPID(double targetPosition)
-    {
-        targetHeight = targetPosition;
-        PIDController.setReference(targetPosition, CANSparkBase.ControlType.kPosition);
-    }
 
     public Command setRightSpeed(double speed){
         return run(()-> {
@@ -119,13 +186,6 @@ public class ClimberSubsystem extends SubsystemBase {
             leftClimberMotor.set(speed);
         });
     }
-
-    public Command setHeight(double height){
-        return run(() -> {
-            runPID(height);
-        });
-    }
-
 
     @Override
     public void periodic()

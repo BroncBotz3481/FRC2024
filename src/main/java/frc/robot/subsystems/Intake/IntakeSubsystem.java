@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotorRight.restoreFactoryDefaults();
         intakeMotorRight.follow(intakeMotorLeft);
         intakeMotorRight.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        intakeMotorRight.setInverted(false);
+        intakeMotorRight.setInverted(true);
         centerMotor = new CANSparkMax(Constants.IntakeConstants.centerMotorID, CANSparkLowLevel.MotorType.kBrushless);
         centerMotor.restoreFactoryDefaults();
         centerMotor.follow(intakeMotorLeft);
@@ -90,6 +90,14 @@ public class IntakeSubsystem extends SubsystemBase {
         return run(() -> {
             intakeOrOuttake(power);
         });
+    }
+
+    public Command manualIntake(){
+        return run(() -> {
+            drop();
+            intakeOrOuttake(0.5);
+        });
+
     }
 
     public DoubleSolenoid.Value getIntakePistonPosition(){

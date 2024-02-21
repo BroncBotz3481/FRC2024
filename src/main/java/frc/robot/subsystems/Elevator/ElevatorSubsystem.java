@@ -17,13 +17,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final CANSparkMax rightLift;
 
-    private double targetAngle;
-
     private final SparkPIDController PIDController;
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
-    private final DigitalInput limitSwitchLATop;
-    private final DigitalInput limitSwitchLABottom;
+    private final DigitalInput limitSwitchTop;
+    private final DigitalInput limitSwitchBottom;
+
+    private double targetAngle;
 
 
     public ElevatorSubsystem() {
@@ -35,8 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.setInverted(true);
         leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitchLATop = new DigitalInput(Constants.ElevatorConstants.limitSwitchLATop);
-        limitSwitchLABottom = new DigitalInput(Constants.ElevatorConstants.limitSwitchLABottom);
+        limitSwitchTop = new DigitalInput(Constants.ElevatorConstants.limitSwitchTop);
+        limitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.limitSwitchBottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         PIDController = rightLift.getPIDController();
@@ -50,23 +50,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         /**
          * Feedforward constant for PID loop
          */
-        public static final double FEEDFORWARD = 0.01;
+        public static final double FEEDFORWARD = 0;
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION = 0.05;
+        public static final double PROPORTION = 0;
         /**
          * Integral constant for PID loop
          */
-        public static final double INTEGRAL = 0.0;
+        public static final double INTEGRAL = 0;
         /**
          * Derivative constant for PID loop
          */
-        public static final double DERIVATIVE = 0.0;
+        public static final double DERIVATIVE = 0;
         /**
          * Integral zone constant for PID loop
          */
-        public static final double INTEGRAL_ZONE = 0.0;
+        public static final double INTEGRAL_ZONE = 0;
     }
 
 
@@ -78,6 +78,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.set(0);
     }
 
+    //TODO: Actually do the math here to get the true angle of the elevator relative to the ground
     public double getAngle(){
         return rightEncoder.getPosition()*360;
     }
@@ -95,7 +96,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     {
         PIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
     }
-
 
     public Command setAngle(double degrees){
         targetAngle = degrees;
@@ -125,7 +125,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         //System.out.println("This is the angle of the elevator: " + targetAngle);
 
     }

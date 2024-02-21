@@ -68,7 +68,7 @@ public final class Constants {
   public static class FeederConstants {
     public static final int feederMotorID = 28;
 
-    public static final int limitSwitchBeanBrakeChannel = 3;
+    public static final int beamBrakeChannel = 3;
 
   }
 
@@ -84,6 +84,9 @@ public final class Constants {
     public static final int leftShooterID = 20;
     public static final int rightShooterID = 21;
 
+    public static final int forwardChannelPort = 2;
+    public static final int reverseChannelPort = 3;
+
   }
 
   public static class LEDConstants {
@@ -96,8 +99,8 @@ public final class Constants {
     public static final int leftLiftID = 32;
     public static final int rightLiftID = 33;
 
-    public static final int limitSwitchLATop = 6;
-    public static final int limitSwitchLABottom = 7;
+    public static final int limitSwitchTop = 6;
+    public static final int limitSwitchBottom = 7;
 
   }
 

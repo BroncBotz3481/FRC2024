@@ -2,17 +2,28 @@ package frc.robot.subsystems.Shooter;
 
 
 import com.revrobotics.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
+import swervelib.encoders.SparkMaxAnalogEncoderSwerve;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
     private final SparkPIDController PIDController;
 
+    //private final SparkAbsoluteEncoder absoluteEncoder;
+
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
+
+    private final DoubleSolenoid trapPiston;
+
+    public static final DoubleSolenoid.Value pistonRetractedPosition = DoubleSolenoid.Value.kReverse;
+
+    public static final DoubleSolenoid.Value pistonExtendedPosition = DoubleSolenoid.Value.kForward;
 
     private double target_Speed;
 
@@ -32,6 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
         PIDController.setFeedbackDevice(rightEncoder);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
                 PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
+        trapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.ShooterConstants.forwardChannelPort, Constants.ShooterConstants.reverseChannelPort);
     }
 
     public static class PIDF
@@ -40,23 +52,23 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Feedforward constant for PID loop
          */
-        public static final double FEEDFORWARD   = 0.01;
+        public static final double FEEDFORWARD   = 0;
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION    = 0.05;
+        public static final double PROPORTION    = 0;
         /**
          * Integral constant for PID loop
          */
-        public static final double INTEGRAL      = 0.0;
+        public static final double INTEGRAL      = 0;
         /**
          * Derivative constant for PID loop
          */
-        public static final double DERIVATIVE    = 0.0;
+        public static final double DERIVATIVE    = 0;
         /**
          * Integral zone constant for PID loop
          */
-        public static final double INTEGRAL_ZONE = 0.0;
+        public static final double INTEGRAL_ZONE = 0;
     }
 
     public void shoot(double power){
@@ -77,8 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void runPID(double targetSpeed)
     {
-        target_Speed = targetSpeed;
-        PIDController.setReference(targetSpeed, CANSparkMax.ControlType.kVelocity);
+        PIDController.setReference(targetSpeed, CANSparkMax.ControlType.kSmartVelocity);
     }
 
     public double getSpeed(){
@@ -90,10 +101,27 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public Command shootIt(double targetSpeed){
+        this.target_Speed = targetSpeed;
         return run(() -> runPID(targetSpeed));
     }
 
+    public Command manualShoot(double power){
+        return run(() -> shoot(power));
+    }
 
+    public void retract() {
+        trapPiston.set(pistonRetractedPosition);
+    }
+
+    public void extend() {
+        trapPiston.set(pistonExtendedPosition);
+    }
+
+    public Command positionPiston(DoubleSolenoid.Value position) {
+        return run(() -> {
+            trapPiston.set(position);
+        });
+    }
     public enum ShooterState{
         HIGHPOWER(100),
         MIDPOWER(50),
