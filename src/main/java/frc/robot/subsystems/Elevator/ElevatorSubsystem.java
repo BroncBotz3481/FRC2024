@@ -115,6 +115,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         });
     }
 
+    public Command stopManual(){
+        return run(()->{
+            changeAngle(0);
+        });
+    }
+
     public enum ElevatorState {
         MAXANGLE(80),
         MIDANGLE(50),
