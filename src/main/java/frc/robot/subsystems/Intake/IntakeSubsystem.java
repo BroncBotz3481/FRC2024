@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotorRight.setInverted(true);
         centerMotor = new CANSparkMax(Constants.IntakeConstants.centerMotorID, CANSparkLowLevel.MotorType.kBrushless);
         centerMotor.restoreFactoryDefaults();
-        centerMotor.follow(intakeMotorLeft);
+        centerMotor.follow(intakeMotorRight);
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         centerMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelPort, Constants.IntakeConstants.reverseChannelPort);
