@@ -76,8 +76,8 @@ public final class Constants {
     public static final int intakeMotorLeftID = 24;
     public static final int intakeMotorRightID = 23;
     public static final int centerMotorID = 25;
-    public static final int forwardChannelPort = 0;
-    public static final int reverseChannelPort = 1;
+    public static final int forwardChannelPort = 1;
+    public static final int reverseChannelPort = 0;
 
   }
   public static class ShooterConstants {

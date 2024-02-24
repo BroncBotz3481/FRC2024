@@ -21,8 +21,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
-    private final DigitalInput leftLimitSwitchTop;
-    private final DigitalInput leftLimitSwitchBottom;
+    //private final DigitalInput leftLimitSwitchTop;
+    //private final DigitalInput leftLimitSwitchBottom;
 
    // private final DigitalInput rightLimitSwitchTop;
 // private final DigitalInput rightLimitSwitchBottom;
@@ -39,8 +39,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.setInverted(true);
         leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
-        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
+        //leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
+        //leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         PIDController = rightLift.getPIDController();

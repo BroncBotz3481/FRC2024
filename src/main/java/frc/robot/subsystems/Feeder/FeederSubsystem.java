@@ -11,14 +11,14 @@ public class FeederSubsystem extends SubsystemBase {
 
     private final CANSparkMax feederMotor;
 
-    private final DigitalInput beamBrake;
+    //private final DigitalInput beamBrake;
 
 
     public FeederSubsystem() {
         feederMotor = new CANSparkMax(Constants.FeederConstants.feederMotorID, CANSparkLowLevel.MotorType.kBrushless);
         feederMotor.restoreFactoryDefaults();
         feederMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        beamBrake = new DigitalInput(Constants.FeederConstants.beamBrakeChannel);
+        //beamBrake = new DigitalInput(Constants.FeederConstants.beamBrakeChannel);
     }
 
     public void setSpeed(double fPower) {
@@ -49,7 +49,8 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public boolean getBeamBrakeState(){
-        return beamBrake.get();
+        return true;
+        //return beamBrake.get();
     }
 
 

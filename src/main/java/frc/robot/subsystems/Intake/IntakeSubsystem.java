@@ -46,6 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeOrOuttake(double power){
         intakeMotorLeft.set(power);
     }
+
     public void stop() {
         intakeMotorLeft.set(0);
     }
@@ -93,14 +94,16 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command manualIntake(){
-        return run(() -> {
+        return runOnce(() -> {
+            System.out.println("Is this running 1?");
             drop();
             intakeOrOuttake(0.5);
         });
     }
 
     public Command stopIntaking(){
-         return run(() -> {
+         return runOnce(() -> {
+            System.out.println("Is this running 2?");
             raise();
             intakeOrOuttake(0);
         });

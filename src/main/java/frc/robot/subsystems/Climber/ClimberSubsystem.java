@@ -27,7 +27,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private RelativeEncoder       rightEncoder;
     private RelativeEncoder       leftEncoder;
-    private final DigitalInput lowerLimitSwitch;
+   // private final DigitalInput lowerLimitSwitch;
 
 
     public ClimberSubsystem() {
@@ -44,7 +44,7 @@ public class ClimberSubsystem extends SubsystemBase {
         rightPIDController = rightClimberMotor.getPIDController();
         leftPIDController.setFeedbackDevice(leftEncoder);
         rightPIDController.setFeedbackDevice(rightEncoder);
-        lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.lowerID);
+       // lowerLimitSwitch = new DigitalInput(Constants.ClimberConstants.lowerID);
         set(ClimberSubsystem.PIDF.PROPORTION, ClimberSubsystem.PIDF.INTEGRAL, ClimberSubsystem.PIDF.DERIVATIVE,
                 ClimberSubsystem.PIDF.FEEDFORWARD, ClimberSubsystem.PIDF.INTEGRAL_ZONE);
     }
