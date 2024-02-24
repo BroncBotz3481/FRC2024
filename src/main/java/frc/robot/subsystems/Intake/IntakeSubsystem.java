@@ -94,8 +94,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command manualIntake(){
-        return runOnce(() -> {
-            System.out.println("Is this running 1?");
+        return run(() -> {
             drop();
             intakeOrOuttake(0.5);
         });
@@ -103,7 +102,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command stopIntaking(){
          return runOnce(() -> {
-            System.out.println("Is this running 2?");
             raise();
             intakeOrOuttake(0);
         });
