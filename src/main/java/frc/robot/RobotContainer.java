@@ -57,9 +57,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    configurePathPlanner();
     autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
     Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
-    configurePathPlanner();
     configureBindings(); // Configure the trigger bindings
   }
 
@@ -86,10 +86,14 @@ public class RobotContainer {
             .whileTrue(m_elevator.runManual(Constants.operatorController::getLeftY));
     Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
     Constants.operatorController.b().whileTrue(m_feeder.runFeeder(-0.5));
-    Constants.operatorController.rightBumper().whileTrue(m_shooter.manualShoot(0.5));
-    Constants.operatorController.x().whileTrue(m_intake.manualIntake());
-    Constants.operatorController.y().whileTrue(m_intake.stopIntaking());
-    Constants.operatorController.leftBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.5),m_feeder.runFeeder(-0.5)));
+    Constants.operatorController.rightTrigger(0.1).whileTrue(m_shooter.shootIt(-5500));
+    Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
+    Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.5),m_feeder.runFeeder(-0.7)));
+    m_elevator.setDefaultCommand(m_elevator.stopManual());
+    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
+    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
+                //Constants.operatorController.x().whileTrue(exampleSubsystem.runManual(()->0));
     //Constants.operatorController.x().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0),m_feeder.runFeeder(0), m_climber.setRightSpeed(0), m_climber.setLeftSpeed(0), m_intake.stopIntaking(), m_elevator.stopManual()));
 
     Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-0.3));
@@ -112,6 +116,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Ground Intake",
             superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
     NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
+    NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5000));
+    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.3));
     m_drivebase.setupPathPlanner();
   }
 
@@ -143,7 +149,7 @@ public class RobotContainer {
     Command driveFieldOrientedDirectAngle = m_drivebase.driveCommand(
             () -> MathUtil.applyDeadband(Constants.driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(Constants.driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> Constants.driverController.getRightX(),
+            () -> -Constants.driverController.getRightX(),
             () -> -Constants.driverController.getRightY());
 
     Command driveFieldOrientedDirectAngleSim = m_drivebase.simDriveCommand(

@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,11 +22,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
-    //private final DigitalInput leftLimitSwitchTop;
-    //private final DigitalInput leftLimitSwitchBottom;
+    private final DigitalInput leftLimitSwitchTop;
+    private final DigitalInput leftLimitSwitchBottom;
 
-   // private final DigitalInput rightLimitSwitchTop;
-// private final DigitalInput rightLimitSwitchBottom;
+   private final DigitalInput rightLimitSwitchTop;
+   private final DigitalInput rightLimitSwitchBottom;
 
     private double targetAngle;
 
@@ -36,17 +37,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftLift.restoreFactoryDefaults();
         rightLift.restoreFactoryDefaults();
         leftLift.follow(rightLift);
-        rightLift.setInverted(true);
-        leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        //leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
-        //leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
+        rightLift.setInverted(false);
+        leftLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rightLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
+        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
+        rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
+        rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         PIDController = rightLift.getPIDController();
         PIDController.setFeedbackDevice(rightEncoder);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
               PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
+        leftLift.burnFlash();
+        rightLift.burnFlash();
     }
 
     public static class PIDF {
@@ -121,6 +126,25 @@ public class ElevatorSubsystem extends SubsystemBase {
         });
     }
 
+    public Command lowerElevator() { 
+        return run(() -> {rightLift.set(-0.3); leftLift.set(-0.3);}).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
+            // leftEncoder.setPosition(0);
+            //leftEncoder.setPosition(22);
+            //rightEncoder.setPosition(22);
+            leftLift.set(0);
+            rightLift.set(0);
+        }));
+    }
+
+    public Command raiseElevator() {
+        return run(() -> {rightLift.set(0.3); leftLift.set(0.3);}).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
+            //leftEncoder.setPosition(57);
+            //rightEncoder.setPosition(57);
+            leftLift.set(0);
+            rightLift.set(0);
+        }));
+    }
+
     public enum ElevatorState {
         MAXANGLE(80),
         MIDANGLE(50),
@@ -135,7 +159,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //System.out.println("This is the angle of the elevator: " + targetAngle);
+        SmartDashboard.putNumber("Lower Limit Switch Right", rightLimitSwitchBottom.get() ? 1 : 0);
+        SmartDashboard.putNumber("Upper Limit Switch Right", rightLimitSwitchTop.get() ? 1 : 0);
+        SmartDashboard.putNumber("Lower Limit Switch Left", leftLimitSwitchBottom.get() ? 1 : 0);
+        SmartDashboard.putNumber("Upper Limit Switch Left", leftLimitSwitchTop.get() ? 1 : 0);
+        SmartDashboard.putNumber("Right Position", rightEncoder.getPosition());
+        SmartDashboard.putNumber("Left Position", leftEncoder.getPosition());
 
     }
 

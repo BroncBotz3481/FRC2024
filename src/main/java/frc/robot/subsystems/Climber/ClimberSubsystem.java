@@ -187,6 +187,13 @@ public class ClimberSubsystem extends SubsystemBase {
         });
     }
 
+    public Command setBothSpeeds(double speed){
+        return run(() ->{
+            rightClimberMotor.set(speed);
+            leftClimberMotor.set(speed);
+        });
+    }
+
     @Override
     public void periodic()
     {

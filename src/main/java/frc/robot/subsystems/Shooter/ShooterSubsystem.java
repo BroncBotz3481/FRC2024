@@ -4,6 +4,7 @@ package frc.robot.subsystems.Shooter;
 import com.revrobotics.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,8 +34,6 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkLowLevel.MotorType.kBrushless);
         leftShooter.restoreFactoryDefaults();
         rightShooter.restoreFactoryDefaults();
-        leftShooter.follow(rightShooter);
-        rightShooter.setInverted(true);
         leftShooter.setIdleMode(CANSparkMax.IdleMode.kCoast);
         rightShooter.setIdleMode(CANSparkMax.IdleMode.kCoast);
         rightEncoder = rightShooter.getEncoder();
@@ -43,7 +42,12 @@ public class ShooterSubsystem extends SubsystemBase {
         PIDController.setFeedbackDevice(rightEncoder);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
                 PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
+        PIDController.setSmartMotionMaxVelocity(PIDF.MAXVELOCITY, 0);
+        PIDController.setSmartMotionMaxAccel(PIDF.MAXACCELERATION, 0);
         trapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.ShooterConstants.forwardChannelPort, Constants.ShooterConstants.reverseChannelPort);
+        leftShooter.follow(rightShooter,true);
+        leftShooter.burnFlash();
+        rightShooter.burnFlash();
     }
 
     public static class PIDF
@@ -52,11 +56,11 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Feedforward constant for PID loop
          */
-        public static final double FEEDFORWARD   = 0;
+        public static final double FEEDFORWARD   = 0.00018;
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION    = 0;
+        public static final double PROPORTION    = 0.0001;
         /**
          * Integral constant for PID loop
          */
@@ -69,13 +73,18 @@ public class ShooterSubsystem extends SubsystemBase {
          * Integral zone constant for PID loop
          */
         public static final double INTEGRAL_ZONE = 0;
+
+        public static final double MAXVELOCITY = 7500;
+
+        public static final double MAXACCELERATION = 3500;
+
     }
 
     public void shoot(double power){
-        rightShooter.set(power);;
+        rightShooter.set(power);
     }
     public void stop() {
-        rightShooter.set(0);;
+        rightShooter.set(0);
     }
 
     public void set(double p, double i, double d, double f, double iz)
@@ -139,6 +148,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
+         SmartDashboard.putNumber("Shooter Velocity", rightEncoder.getVelocity());
         //System.out.println("This is the speed of the shooter: " + getSpeed());
         //encoderVelocity = shooterMotorRight.getSelectedSensorVelocity(pidIdx.PRIMARY.ordinal());
     }

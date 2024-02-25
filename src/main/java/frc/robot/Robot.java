@@ -126,14 +126,21 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-    try
-    {
-      new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
-    } catch (IOException e)
-    {
-      throw new RuntimeException(e);
+     CommandScheduler.getInstance().cancelAll();
+     m_robotContainer.setMotorBrake(true);
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
     }
+    // try
+    // {
+    //   new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
+    // } catch (IOException e)
+    // {
+    //   throw new RuntimeException(e);
+    // }
   }
 
   /** This function is called periodically during test mode. */
