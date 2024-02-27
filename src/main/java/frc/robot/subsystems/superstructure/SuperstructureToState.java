@@ -38,8 +38,8 @@ public class SuperstructureToState extends SequentialCommandGroup {
 
         ClimberSubsystem climber = superstructure.m_climber;
         FeederSubsystem feeder = superstructure.m_feeder;
-        IntakeSubsystem intake = superstructure.m_intake;
-        LEDSubsystem LED = superstructure.m_LED;
+        //IntakeSubsystem intake = superstructure.m_intake;
+        //LEDSubsystem LED = superstructure.m_LED;
         ShooterSubsystem shooter = superstructure.m_shooter;
         ElevatorSubsystem elevator = superstructure.m_elevator;
         SwerveSubsystem swerve = superstructure.m_swerve;
@@ -52,14 +52,13 @@ public class SuperstructureToState extends SequentialCommandGroup {
         Command shooterCmd = Commands.waitUntil(m_shooterWait).andThen(superstructure.m_shooter.shootIt(m_targetState.shoot.speed).until(m_shooterUntil));
         Command feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.runFeeder(m_targetState.feed.power).until(m_feederUntil));
         Command elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
-        Command intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).andThen(superstructure.m_intake.runIntake(m_targetState.intake.power)).until(m_intakeUntil));
+        //Command intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).andThen(superstructure.m_intake.runIntake(m_targetState.intake.power)).until(m_intakeUntil));
         Command climberCmd = Commands.waitUntil(m_climberWait).andThen(superstructure.m_climber.setHeight(m_targetState.climb.height)).until(m_climberUntil);
 
 
         ParallelCommandGroup commandGroup = new ParallelCommandGroup(shooterCmd,
                                                                      feederCmd,
                                                                      elevatorCmd,
-                                                                     intakeCmd,
                                                                      climberCmd
                                                                     );
 
@@ -69,7 +68,7 @@ public class SuperstructureToState extends SequentialCommandGroup {
     private void determineConditions() {
         ClimberSubsystem climber = m_superstructure.m_climber;
         FeederSubsystem feeder = m_superstructure.m_feeder;
-        IntakeSubsystem intake = m_superstructure.m_intake;
+        //IntakeSubsystem intake = m_superstructure.m_intake;
         ShooterSubsystem shooter = m_superstructure.m_shooter;
         ElevatorSubsystem elevator = m_superstructure.m_elevator;
 
@@ -92,14 +91,14 @@ public class SuperstructureToState extends SequentialCommandGroup {
             m_feederUntil = feeder::getBeamBrakeState;
         }
 
-        if (m_targetState == SuperState.GROUND_INTAKE) {
-            m_intakeWait = () -> true;
-            m_feederWait = () -> (intake.getIntakePistonPosition() == IntakeSubsystem.intakePistonDownPosition);
-            m_feederUntil = feeder::getBeamBrakeState;
-        }
+        // if (m_targetState == SuperState.GROUND_INTAKE) {
+        //     m_intakeWait = () -> true;
+        //     m_feederWait = () -> (intake.getIntakePistonPosition() == IntakeSubsystem.intakePistonDownPosition);
+        //     m_feederUntil = feeder::getBeamBrakeState;
+        // }
 
         if (m_targetState == SuperState.CLIMB_REACH) {
-            m_climberWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle) && (intake.getIntakePistonPosition() == IntakeSubsystem.intakePistonUpPosition));
+            m_climberWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle));
         }
 
     }

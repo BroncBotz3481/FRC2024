@@ -20,12 +20,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
-    private final DoubleSolenoid trapPiston;
-
-    public static final DoubleSolenoid.Value pistonRetractedPosition = DoubleSolenoid.Value.kReverse;
-
-    public static final DoubleSolenoid.Value pistonExtendedPosition = DoubleSolenoid.Value.kForward;
-
     private double target_Speed;
 
 
@@ -44,7 +38,6 @@ public class ShooterSubsystem extends SubsystemBase {
                 PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
         PIDController.setSmartMotionMaxVelocity(PIDF.MAXVELOCITY, 0);
         PIDController.setSmartMotionMaxAccel(PIDF.MAXACCELERATION, 0);
-        trapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.ShooterConstants.forwardChannelPort, Constants.ShooterConstants.reverseChannelPort);
         leftShooter.follow(rightShooter,true);
         leftShooter.burnFlash();
         rightShooter.burnFlash();
@@ -102,7 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getSpeed(){
-        return target_Speed;
+        return rightEncoder.getVelocity();
     }
 
     public double getPower(){
@@ -118,19 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
         return run(() -> shoot(power));
     }
 
-    public void retract() {
-        trapPiston.set(pistonRetractedPosition);
-    }
-
-    public void extend() {
-        trapPiston.set(pistonExtendedPosition);
-    }
-
-    public Command positionPiston(DoubleSolenoid.Value position) {
-        return run(() -> {
-            trapPiston.set(position);
-        });
-    }
     public enum ShooterState{
         HIGHPOWER(100),
         MIDPOWER(50),
@@ -149,8 +129,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic()
     {
          SmartDashboard.putNumber("Shooter Velocity", rightEncoder.getVelocity());
-        //System.out.println("This is the speed of the shooter: " + getSpeed());
-        //encoderVelocity = shooterMotorRight.getSelectedSensorVelocity(pidIdx.PRIMARY.ordinal());
     }
 
 }

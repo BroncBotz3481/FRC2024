@@ -25,8 +25,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DigitalInput leftLimitSwitchTop;
     private final DigitalInput leftLimitSwitchBottom;
 
-   private final DigitalInput rightLimitSwitchTop;
-   private final DigitalInput rightLimitSwitchBottom;
+    private final DigitalInput rightLimitSwitchTop;
+    private final DigitalInput rightLimitSwitchBottom;
 
     private double targetAngle;
 

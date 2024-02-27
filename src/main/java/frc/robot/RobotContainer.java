@@ -39,7 +39,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final FeederSubsystem m_feeder = new FeederSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  //private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final LEDSubsystem m_LED = new LEDSubsystem();
@@ -49,7 +49,6 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   public final Superstructure superstructure = new Superstructure(m_climber,
                                                                   m_feeder,
-                                                                  m_intake,
                                                                   m_shooter,
                                                                   m_elevator,
                                                                   m_LED,
@@ -87,10 +86,9 @@ public class RobotContainer {
     Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
     Constants.operatorController.b().whileTrue(m_feeder.runFeeder(-0.5));
     Constants.operatorController.rightTrigger(0.1).whileTrue(m_shooter.shootIt(-5500));
-    Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
-    Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
+    //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
+   // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
     Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.5),m_feeder.runFeeder(-0.7)));
-    m_elevator.setDefaultCommand(m_elevator.stopManual());
     Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
     Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
                 //Constants.operatorController.x().whileTrue(exampleSubsystem.runManual(()->0));
