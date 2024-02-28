@@ -36,20 +36,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift = new CANSparkMax(Constants.ElevatorConstants.rightLiftID, CANSparkLowLevel.MotorType.kBrushless);
         leftLift.restoreFactoryDefaults();
         rightLift.restoreFactoryDefaults();
-        leftLift.follow(rightLift);
-        rightLift.setInverted(false);
-        leftLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        rightLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
         leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
         rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
         rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
+        rightEncoder.setPositionConversionFactor(28/40.09); 
+        leftEncoder.setPositionConversionFactor(28/40.09);  //angle displacement/rotations
+        rightEncoder.setPosition(53);
+        leftEncoder.setPosition(53);
         PIDController = rightLift.getPIDController();
         PIDController.setFeedbackDevice(rightEncoder);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
               PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
+        leftLift.follow(rightLift,false);
         leftLift.burnFlash();
         rightLift.burnFlash();
     }
@@ -63,7 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION = 0;
+        public static final double PROPORTION = 0.03;
         /**
          * Integral constant for PID loop
          */
@@ -89,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Actually do the math here to get the true angle of the elevator relative to the ground
     public double getAngle(){
-        return rightEncoder.getPosition()*360;
+        return rightEncoder.getPosition();
     }
 
     public void set(double p, double i, double d, double f, double iz)
