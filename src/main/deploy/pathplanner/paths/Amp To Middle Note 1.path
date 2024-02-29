@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8,
-        "y": 7.6
+        "x": 1.8138348020468287,
+        "y": 7.576313895213793
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.12329354100162,
-        "y": 7.6
+        "x": 2.1371283430484485,
+        "y": 7.576313895213793
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AMPWaypoint"
     },
     {
       "anchor": {

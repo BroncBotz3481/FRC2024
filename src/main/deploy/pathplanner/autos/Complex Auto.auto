@@ -28,6 +28,12 @@
           "data": {
             "pathName": "E1 To Speaker Score"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TestShoot1"
+          }
         }
       ]
     }
