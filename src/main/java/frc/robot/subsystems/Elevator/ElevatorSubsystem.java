@@ -45,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         rightEncoder.setPositionConversionFactor(28/40.09); 
-        leftEncoder.setPositionConversionFactor(28/40.09);  //angle displacement/rotations
+        leftEncoder.setPositionConversionFactor(28/40.09);  //rotations to angles
         rightEncoder.setPosition(53);
         leftEncoder.setPosition(53);
         PIDController = rightLift.getPIDController();
@@ -66,7 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION = 0.03;
+        public static final double PROPORTION = 0.045;
         /**
          * Integral constant for PID loop
          */
@@ -130,21 +130,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public Command lowerElevator() { 
-        return run(() -> {rightLift.set(-0.3); leftLift.set(-0.3);}).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
+        return run(() -> {rightLift.set(-0.15); leftLift.set(-0.15);}).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
             // leftEncoder.setPosition(0);
             //leftEncoder.setPosition(22);
             //rightEncoder.setPosition(22);
             leftLift.set(0);
             rightLift.set(0);
+            leftEncoder.setPosition(25);
+            rightEncoder.setPosition(25);
         }));
     }
 
     public Command raiseElevator() {
-        return run(() -> {rightLift.set(0.3); leftLift.set(0.3);}).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
+        return run(() -> {rightLift.set(0.15); leftLift.set(0.15);}).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
             //leftEncoder.setPosition(57);
             //rightEncoder.setPosition(57);
             leftLift.set(0);
             rightLift.set(0);
+            leftEncoder.setPosition(53);
+            rightEncoder.setPosition(53);
         }));
     }
 

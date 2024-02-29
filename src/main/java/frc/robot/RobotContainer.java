@@ -81,15 +81,15 @@ public class RobotContainer {
 //    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
 //    Constants.operatorController.leftTrigger(0.1).whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
     // Manual controls
-    new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
-            .whileTrue(m_elevator.runManual(Constants.operatorController::getLeftY));
     Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
-    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(-0.5));
+    Constants.operatorController.b().whileTrue(m_elevator.setAngle(41.5));
     Constants.operatorController.rightTrigger(0.1).whileTrue(m_shooter.shootIt(-5500));
+    Constants.operatorController.leftTrigger(0.1).whileTrue(m_shooter.shootIt(-4000));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
-    Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(49));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.5),m_feeder.runFeeder(-0.7)));
+    Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(46));
+    
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.3),m_feeder.runFeeder(-0.7)));
     Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
     Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
                 //Constants.operatorController.x().whileTrue(exampleSubsystem.runManual(()->0));
