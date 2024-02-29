@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -101,7 +103,30 @@ public class RobotContainer {
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.3));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.3));  
     Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.3));    
-    Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.3)); 
+    Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.3));
+    // ! ROTATION VALUE IS IN RADIANS, 0 IS AWAY FROM YOU, PI IS TORWARD YOU
+    Constants.operatorController.povDown().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(180)).withTimeout(2));
+
+    var alliance = DriverStation.getAlliance();
+    if(alliance.isPresent()) {
+      if(alliance.get() == DriverStation.Alliance.Red) { // Red alliance
+        Constants.operatorController.povRight().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(270)))
+                .withTimeout(2)); // Right -> amp
+        Constants.operatorController.povLeft().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(60)))
+                .withTimeout(2)); // Left -> source
+      }
+      else { // Blue alliance
+        Constants.operatorController.povLeft().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(90)))
+                .withTimeout(2)); // Left -> Amp
+        Constants.operatorController.povRight().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(300)))
+                .withTimeout(2)); // Left -> source
+      }
+    } else { // No alliance -> Assume red
+      Constants.operatorController.povRight().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(270)))
+              .withTimeout(2)); // Right -> amp
+      Constants.operatorController.povLeft().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(60)))
+              .withTimeout(2)); // Left -> source
+    }
                 //Constants.operatorController.x().whileTrue(exampleSubsystem.runManual(()->0));
     //Constants.operatorController.x().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0),m_feeder.runFeeder(0), m_climber.setRightSpeed(0), m_climber.setLeftSpeed(0), m_intake.stopIntaking(), m_elevator.stopManual()));
     

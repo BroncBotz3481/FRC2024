@@ -536,4 +536,12 @@ public Command sysIdAngleMotorCommand() {
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
   }
+
+  public Command rotateToHeading(Rotation2d rotation2d)
+  {
+    return run(() -> drive(new Translation2d(),
+            getSwerveController().headingCalculate(getHeading().getRadians(), rotation2d.getRadians()),
+            true
+            ));
+  }
 }
