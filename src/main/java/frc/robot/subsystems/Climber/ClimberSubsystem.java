@@ -1,6 +1,8 @@
 package frc.robot.subsystems.Climber;
 
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -174,16 +176,16 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
 
-    public Command setRightSpeed(double speed){
+    public Command setRightSpeed(double power){
         return run(()-> {
-            rightClimberMotor.set(speed);
+            rightClimberMotor.set(power);
         });
     }
 
 
-    public Command setLeftSpeed(double speed){
+    public Command setLeftSpeed(double power){
         return run(()-> {
-            leftClimberMotor.set(speed);
+            leftClimberMotor.set(power);
         });
     }
 

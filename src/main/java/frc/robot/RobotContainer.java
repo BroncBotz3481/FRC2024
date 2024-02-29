@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
@@ -81,24 +82,33 @@ public class RobotContainer {
 //    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
 //    Constants.operatorController.leftTrigger(0.1).whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
     // Manual controls
+    //  new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
+    //  .whileTrue(m_climber.setLeftSpeed(Constants.operatorController::getLeftY));
+    //  new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(5)) > 0.1)
+    //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
+
+    // new Trigger(null)
     Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
-    Constants.operatorController.b().whileTrue(m_elevator.setAngle(41.5));
-    Constants.operatorController.rightTrigger(0.1).whileTrue(m_shooter.shootIt(-5500));
-    Constants.operatorController.leftTrigger(0.1).whileTrue(m_shooter.shootIt(-4000));
+    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
+    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
+    //Constants.operatorController.b().whileTrue(m_elevator.setAngle(41.5));
+    Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), (m_shooter.shootIt(-5500))));
+    Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), (m_shooter.shootIt(-4000))));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
     Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(46));
-    
     Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.3),m_feeder.runFeeder(-0.7)));
-    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
-    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
+    Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.3));    
+    Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.3));  
+    Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.3));    
+    Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.3)); 
                 //Constants.operatorController.x().whileTrue(exampleSubsystem.runManual(()->0));
     //Constants.operatorController.x().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0),m_feeder.runFeeder(0), m_climber.setRightSpeed(0), m_climber.setLeftSpeed(0), m_intake.stopIntaking(), m_elevator.stopManual()));
-
-    Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-0.3));
-    Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(0.3));
-    Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-0.3));
-    Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(0.3));
+    
+    // Constants.driverController.rightBumper().whileTrue(m_climber.setRightSpeed(-0.3));
+    // Constants.driverController.rightTrigger(0.1).whileTrue(m_climber.setRightSpeed(0.3));
+    // Constants.driverController.leftBumper().whileTrue(m_climber.setLeftSpeed(-0.3));
+    // Constants.driverController.leftTrigger(0.1).whileTrue(m_climber.setLeftSpeed(0.3));
     //Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
 
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure
@@ -115,7 +125,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Ground Intake",
             superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
     NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
-    NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5000));
+    NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5500));
     NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.3));
     m_drivebase.setupPathPlanner();
   }

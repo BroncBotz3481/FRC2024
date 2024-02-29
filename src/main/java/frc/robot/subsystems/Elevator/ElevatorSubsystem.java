@@ -114,6 +114,72 @@ public class ElevatorSubsystem extends SubsystemBase {
         return run(() -> {
             runPID(degrees);
         });
+        // if(targetAngle>=25||targetAngle<=53){
+        //     return run(() -> {
+        //         runPID(degrees);
+        //      }).until(() -> (leftLimitSwitchTop.get() || rightLimitSwitchTop.get() || leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get() || rightEncoder.getPosition()<25 || rightEncoder.getPosition()>53)).andThen(runOnce(() -> {
+        //     leftLift.set(0);
+        //     rightLift.set(0);
+        //     if (leftLimitSwitchTop.get() || rightLimitSwitchTop.get() || rightEncoder.getPosition()>53)
+        //     leftEncoder.setPosition(53);
+        //     rightEncoder.setPosition(53);
+        //     if (leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get() || rightEncoder.getPosition()>25)
+        //     leftEncoder.setPosition(25);
+        //     rightEncoder.setPosition(25);
+        // }));
+        // }else{
+        //     return run(() -> {
+        //     runPID(degrees);
+        // }).until(() -> (leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()) && rightEncoder.getPosition()>25.5).andThen(runOnce(() -> {
+        //     leftLift.set(0);
+        //     rightLift.set(0);
+        //     leftEncoder.setPosition(25);
+        //     rightEncoder.setPosition(25);
+        // }));
+        // }
+
+        // if(leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get())
+        // {
+        //     if(targetAngle >= 53)
+        //         return run(() -> {
+        //                 runPID(degrees);
+        //         }).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
+        //             leftLift.set(0);
+        //             rightLift.set(0);
+        //             leftEncoder.setPosition(53);
+        //             rightEncoder.setPosition(53);
+        //         }));
+        //     else
+        //         return run(() -> {
+        //             runPID(degrees);
+        //         });
+
+        // } 
+        // else if(leftLimitSwitchTop.get() || rightLimitSwitchTop.get())
+        // {
+        //     if(targetAngle == 25)
+        //         return run(() -> {
+        //                 runPID(degrees);
+        //         }).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
+        //             leftLift.set(0);
+        //             rightLift.set(0);
+        //             leftEncoder.setPosition(25);
+        //             rightEncoder.setPosition(25);
+        //         }));
+        //     else
+        //         return run(() -> {
+        //             runPID(degrees);
+        //         });
+        // }
+        // if(targetAngle == 25)
+        //         return run(() -> {
+        //                 runPID(degrees);
+        //         }).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
+        //             leftLift.set(0);
+        //             rightLift.set(0);
+        //             leftEncoder.setPosition(25);
+        //             rightEncoder.setPosition(25);
+        //         }));
     }
 
     public Command runManual(DoubleSupplier supplier){
