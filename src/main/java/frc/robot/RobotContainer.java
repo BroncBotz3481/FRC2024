@@ -194,7 +194,24 @@ public class RobotContainer {
 
     m_drivebase.setDefaultCommand(
             !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngle);
-
+    Constants.driverController.axisGreaterThan(2, .12)
+            .or(Constants.driverController.axisGreaterThan(3, .12)).whileTrue(m_drivebase.driveCommand(
+                    () -> (Math.abs(Constants.driverController.getRawAxis(1)) > OperatorConstants.LEFT_Y_DEADBAND)
+                            ? Constants.driverController.getRawAxis(1)
+                            : 0,
+                    () -> (Math.abs(Constants.driverController.getRawAxis(0)) > OperatorConstants.LEFT_X_DEADBAND)
+                            ? Constants.driverController.getRawAxis(0)
+                            : 0,
+                    () -> {
+                      if (Math.abs(Constants.driverController.getRawAxis(2)) > .12) {
+                        return Constants.driverController.getRawAxis(2) * .4; // CHANGE THIS CONSTANT IF YOU WANT IT TO BE FASTER OR SLOWER
+                      } else if (Math.abs(Constants.driverController.getRawAxis(3)) > .12) {
+                        return Constants.driverController.getRawAxis(3) * .4 * -1; // CHANGE THIS CONSTANT IF YOU WANT IT TO BE FASTER OR SLOWER
+                      } else {
+                        return 0;
+                      }
+                    }
+            ));
   }
 
   public void setMotorBrake(boolean brake)
