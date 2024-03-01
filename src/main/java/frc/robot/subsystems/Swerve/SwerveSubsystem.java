@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants;
 import frc.robot.Constants.AutonConstants;
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -543,5 +544,11 @@ public Command sysIdAngleMotorCommand() {
             getSwerveController().headingCalculate(getHeading().getRadians(), rotation2d.getRadians()),
             true
             ));
+  }
+
+  public Command setPowerScale(double scale){
+    return run(() -> {
+      Constants.OperatorConstants.SLOW_SCALE = scale;
+    }).finallyDo(() -> Constants.OperatorConstants.SLOW_SCALE = 1);
   }
 }

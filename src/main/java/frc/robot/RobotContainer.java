@@ -142,6 +142,8 @@ public class RobotContainer {
     Constants.driverController.y().whileTrue(Commands.deferredProxy(() -> m_drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
     ));
+    Constants.driverController.rightBumper().whileTrue(m_drivebase.setPowerScale(0.75));
+    Constants.driverController.leftBumper().whileTrue(m_drivebase.setPowerScale(0.50));
   }
 
   public void configurePathPlanner() {
@@ -180,8 +182,8 @@ public class RobotContainer {
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle = m_drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(Constants.driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(Constants.driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(Constants.driverController.getLeftY()*Constants.OperatorConstants.SLOW_SCALE, OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(Constants.driverController.getLeftX()*Constants.OperatorConstants.SLOW_SCALE, OperatorConstants.LEFT_X_DEADBAND),
             () -> -Constants.driverController.getRightX(),
             () -> -Constants.driverController.getRightY());
 
