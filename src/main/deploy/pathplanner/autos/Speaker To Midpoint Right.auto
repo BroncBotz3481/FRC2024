@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7328954159687686,
-      "y": 6.75830571115472
+      "x": 0.7050561319382253,
+      "y": 6.733731013824367
     },
-    "rotation": 60.0
+    "rotation": 59.82647997035568
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "POS 1 To AMP"
+            "pathName": "Speaker To Midpoint Right"
           }
         }
       ]
