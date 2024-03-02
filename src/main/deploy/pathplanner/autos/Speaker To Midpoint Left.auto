@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker To Midpoint Left"

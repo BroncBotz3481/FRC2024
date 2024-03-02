@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoShooter;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 /**
@@ -98,11 +100,11 @@ public class RobotContainer {
     Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), (m_shooter.shootIt(-4000))));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
-    Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(46));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.3),m_feeder.runFeeder(-0.7)));
-    Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.3));    
+    Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(44.5));
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.75),m_feeder.runFeeder(-0.7)));
+    Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.5));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.3));  
-    Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.3));    
+    Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.5));    
     Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.3));
     // ! ROTATION VALUE IS IN RADIANS, 0 IS AWAY FROM YOU, PI IS TORWARD YOU
     Constants.driverController.povDown().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(180))).withTimeout(2));
@@ -142,8 +144,8 @@ public class RobotContainer {
     Constants.driverController.y().whileTrue(Commands.deferredProxy(() -> m_drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
     ));
-    Constants.driverController.rightBumper().whileTrue(m_drivebase.setPowerScale(0.75));
-    Constants.driverController.leftBumper().whileTrue(m_drivebase.setPowerScale(0.50));
+    // Constants.driverController.rightBumper().whileTrue(m_drivebase.setPowerScale(0.75));
+    // Constants.driverController.leftBumper().whileTrue(m_drivebase.setPowerScale(0.50));
   }
 
   public void configurePathPlanner() {
@@ -151,8 +153,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("Ground Intake",
             superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
     NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
+    NamedCommands.registerCommand("ShootNote", new AutoShooter(m_shooter, m_feeder));
     NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5500));
-    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.3));
+    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.15));
+
+    NamedCommands.registerCommand("StopShooter", m_shooter.manualShoot(0));
+
+    NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0));
     m_drivebase.setupPathPlanner();
   }
 
@@ -182,8 +189,8 @@ public class RobotContainer {
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle = m_drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(Constants.driverController.getLeftY()*Constants.OperatorConstants.SLOW_SCALE, OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(Constants.driverController.getLeftX()*Constants.OperatorConstants.SLOW_SCALE, OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(Constants.driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(Constants.driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
             () -> -Constants.driverController.getRightX(),
             () -> -Constants.driverController.getRightY());
 
