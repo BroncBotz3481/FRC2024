@@ -1,8 +1,10 @@
 package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +21,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final CANSparkMax rightLift;
 
     private final SparkPIDController PIDController;
+
+    private final SparkAbsoluteEncoder leftAbsoluteEncoder;
+    private final SparkAbsoluteEncoder rightAbsoluteEncoder;
+
     private final RelativeEncoder rightEncoder;
     private final RelativeEncoder leftEncoder;
 
@@ -42,6 +48,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
         rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
         rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
+        leftAbsoluteEncoder = leftLift.getAbsoluteEncoder();
+        rightAbsoluteEncoder = rightLift.getAbsoluteEncoder();
+        leftAbsoluteEncoder.setPositionConversionFactor(12388213); //Dummy conversion factor
+        rightAbsoluteEncoder.setPositionConversionFactor(123134123); //Dummy conversion factor
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();
         rightEncoder.setPositionConversionFactor(28/40.09); 
