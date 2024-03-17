@@ -11,12 +11,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class IntakeSubsystem extends SubsystemBase {
-
-    private final CANSparkMax intakeMotorLeft;
-
-    private final CANSparkMax intakeMotorRight;
     
-    private final CANSparkMax centerMotor;
+    private final CANSparkMax intakeMotor;
 
     private final DoubleSolenoid intakePiston;
 
@@ -26,18 +22,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public IntakeSubsystem() {
-        intakeMotorLeft = new CANSparkMax(Constants.IntakeConstants.intakeMotorLeftID, CANSparkLowLevel.MotorType.kBrushless);
-        intakeMotorLeft.restoreFactoryDefaults();
-        intakeMotorLeft.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        intakeMotorLeft.setInverted(false);
-        intakeMotorRight = new CANSparkMax(Constants.IntakeConstants.intakeMotorRightID, CANSparkLowLevel.MotorType.kBrushless);
-        intakeMotorRight.restoreFactoryDefaults();
-        intakeMotorRight.follow(intakeMotorLeft);
-        intakeMotorRight.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        intakeMotorRight.setInverted(true);
-        centerMotor = new CANSparkMax(Constants.IntakeConstants.centerMotorID, CANSparkLowLevel.MotorType.kBrushless);
-        centerMotor.restoreFactoryDefaults();
-        centerMotor.follow(intakeMotorRight);
+        intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, CANSparkLowLevel.MotorType.kBrushless);
+        intakeMotor.restoreFactoryDefaults();
         centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         centerMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelPort, Constants.IntakeConstants.reverseChannelPort);

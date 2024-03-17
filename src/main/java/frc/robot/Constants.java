@@ -74,9 +74,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int intakeMotorLeftID = 24;
-    public static final int intakeMotorRightID = 23;
-    public static final int centerMotorID = 25;
+    public static final int intakeMotorID = 24;
     public static final int forwardChannelPort = 1;
     public static final int reverseChannelPort = 0;
 
