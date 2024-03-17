@@ -80,8 +80,8 @@ public final class Constants {
 
   }
   public static class ShooterConstants {
-    public static final int leftShooterID = 20;
-    public static final int rightShooterID = 21;
+    public static final int leftShooterID = 1;
+    public static final int rightShooterID = 51;
 
     public static final int forwardChannelPort = 2;
     public static final int reverseChannelPort = 3;

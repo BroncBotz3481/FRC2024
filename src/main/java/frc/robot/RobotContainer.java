@@ -102,8 +102,9 @@ public class RobotContainer {
     Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), (m_shooter.manualShoot(0.3))));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
-    Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(0.75),m_feeder.runFeeder(-0.7)));
+    //Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
+    Constants.operatorController.leftBumper().whileTrue(m_shooter.manualShoot(0.8));
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7)));
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.8));  
     Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.8));    

@@ -71,11 +71,11 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Feedforward constant for PID loop
          */
-        public static final double FEEDFORWARD   = 0.00018;
+        public static final double FEEDFORWARD   = 0;  //0.00018
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION    = 0.0001;
+        public static final double PROPORTION    = 0; //0.0001
         /**
          * Integral constant for PID loop
          */
@@ -91,11 +91,11 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Max velocity for Smart Velocity
          */
-        public static final double MAXVELOCITY = 7500;
+        public static final double MAXVELOCITY = 300000;
         /**
          * Max acceleration for Smart Velocity
          */
-        public static final double MAXACCELERATION = 3500;
+        public static final double MAXACCELERATION = 200000;
 
     }
 
