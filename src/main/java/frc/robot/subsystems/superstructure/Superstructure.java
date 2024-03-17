@@ -18,6 +18,7 @@ public class Superstructure {
     public final ElevatorSubsystem m_elevator;
     public final SwerveSubsystem m_swerve;
     public final LEDSubsystem m_LED;
+    public final IntakeSubsystem m_intake;
 
     public SuperState m_prevState = SuperState.SAFE;
 
@@ -26,18 +27,18 @@ public class Superstructure {
 
 
     public Superstructure(ClimberSubsystem climber, FeederSubsystem feeder,
-                          ShooterSubsystem shooter, ElevatorSubsystem elevator, LEDSubsystem LED,
+                          ShooterSubsystem shooter, ElevatorSubsystem elevator, IntakeSubsystem intake, LEDSubsystem LED,
                           SwerveSubsystem swerve) {
         m_climber = climber;
         m_feeder = feeder;
-        //m_intake = intake;
+        m_intake = intake;
         m_shooter = shooter;
         m_elevator = elevator;
         m_LED = LED;
         m_swerve = swerve;
        m_climber.setDefaultCommand(m_climber.setBothSpeeds(0));
        m_feeder.setDefaultCommand(m_feeder.runFeeder(FeederSubsystem.FeederState.OFF.power));
-       //m_intake.setDefaultCommand(m_intake.stopIntaking());
+       m_intake.setDefaultCommand(m_intake.stopIntaking());
        m_shooter.setDefaultCommand(m_shooter.shootIt(ShooterSubsystem.ShooterState.OFF.speed));
        m_elevator.setDefaultCommand(m_elevator.stopManual());
 //      m_elevator.setDefaultCommand(m_elevator.setAngle(ElevatorSubsystem.ElevatorState.MAXANGLE.angle));

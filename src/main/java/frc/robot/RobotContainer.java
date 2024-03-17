@@ -48,6 +48,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final LEDSubsystem m_LED = new LEDSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   private final SwerveSubsystem m_drivebase = SwerveSubsystem.getInstance();
 
@@ -56,6 +57,7 @@ public class RobotContainer {
                                                                   m_feeder,
                                                                   m_shooter,
                                                                   m_elevator,
+                                                                  m_intake,
                                                                   m_LED,
                                                                   m_drivebase);
 

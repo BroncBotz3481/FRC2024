@@ -24,21 +24,21 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.restoreFactoryDefaults();
-        centerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        centerMotor.setInverted(false);
+        intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        intakeMotor.setInverted(false);
         intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,Constants.IntakeConstants.forwardChannelPort, Constants.IntakeConstants.reverseChannelPort);
     }
 
     public void intakeOrOuttake(double power){
-        intakeMotorLeft.set(power);
+        intakeMotor.set(power);
     }
 
     public void stop() {
-        intakeMotorLeft.set(0);
+        intakeMotor.set(0);
     }
 
     public double getSpeed(){
-        return intakeMotorLeft.get();
+        return intakeMotor.get();
     }
 
     public enum IntakeState{
@@ -88,7 +88,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command stopIntaking(){
          return runOnce(() -> {
-            raise();
             intakeOrOuttake(0);
         });
     }
