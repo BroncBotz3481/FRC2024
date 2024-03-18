@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.061044248736447,
-        "y": 6.686202192899992
+        "x": 2.23,
+        "y": 6.81
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1281650069403657,
-        "y": 6.867277510189786
+        "x": 3.297120758203919,
+        "y": 6.991075317289794
       },
       "isLocked": false,
       "linkedName": "E1 Speaker Score"
