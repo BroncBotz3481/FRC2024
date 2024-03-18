@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5996586030261917,
-      "y": 2.143083087878016
+      "x": 0.5914513989765701,
+      "y": 2.131842790045313
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Stay Away"
+            "pathName": "Left Left To E8"
           }
         }
       ]
