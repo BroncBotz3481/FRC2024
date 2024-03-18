@@ -50,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
         leftAbsoluteEncoder = leftLift.getAbsoluteEncoder();
         rightAbsoluteEncoder = rightLift.getAbsoluteEncoder();
-        leftAbsoluteEncoder.setPositionConversionFactor(12388213); //Dummy conversion factor
+        leftAbsoluteEncoder.setPositionConversionFactor((x-35.79)/42.95); //Dummy conversion factor
         rightAbsoluteEncoder.setPositionConversionFactor(123134123); //Dummy conversion factor
         rightEncoder = rightLift.getEncoder();
         leftEncoder = leftLift.getEncoder();

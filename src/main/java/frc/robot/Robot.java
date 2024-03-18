@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -31,6 +31,8 @@ public class Robot extends TimedRobot {
   private LEDSubsystem m_ledSubsystem;
 
   private Timer disabledTimer;
+  
+  private Timer timer;
 
   public Robot()
   {
@@ -119,11 +121,16 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
+    timer = new Timer();
+    timer.start();
+    Shuffleboard.getTab("LiveWindow").add("Time", timer.getMatchTime());
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {

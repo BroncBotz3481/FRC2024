@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import swervelib.encoders.SparkMaxAnalogEncoderSwerve;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 public class ShooterSubsystem extends SubsystemBase {
     // private final CANSparkMax leftShooter;
