@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.9194754844065995,
-        "y": 7.4472657774260576
+        "x": 2.570201630576601,
+        "y": 6.998120328027766
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.920551163606503,
-        "y": 7.494846943676174
+        "x": 2.370201630576601,
+        "y": 6.998120328027766
       },
       "isLocked": false,
-      "linkedName": "E4"
+      "linkedName": "E1Waypoint"
     },
     {
       "anchor": {
-        "x": 1.6769598641251797,
-        "y": 6.834688382669943
+        "x": 2.570201630576601,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 2.217879362721542,
-        "y": 7.228536083701014
+        "x": 1.8202016305766011,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "E1 Speaker Score"
+      "linkedName": "E2"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

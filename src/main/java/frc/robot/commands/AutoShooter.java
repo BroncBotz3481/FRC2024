@@ -39,7 +39,7 @@ public class AutoShooter extends Command {
     System.out.println(timer.get());
     m_shooter.runPID(-5500);
     if (timer.get()>=2)
-      m_feeder.setSpeed(0.5);
+      m_feeder.setSpeed(0.8);
   }
 
   // Called once the command ends or is interrupted.

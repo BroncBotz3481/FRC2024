@@ -2,25 +2,31 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7050561319382253,
-      "y": 6.733731013824367
+      "x": 0.73,
+      "y": 6.76
     },
-    "rotation": 59.82647997035568
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootNote"
+            "pathName": "Right To E1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker To Midpoint Right"
+            "pathName": "E1 To Right Speaker Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Speaker Score To E2"
           }
         }
       ]
