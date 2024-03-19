@@ -25,14 +25,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final SparkAbsoluteEncoder leftAbsoluteEncoder;
     private final SparkAbsoluteEncoder rightAbsoluteEncoder;
 
-    private final RelativeEncoder rightEncoder;
-    private final RelativeEncoder leftEncoder;
-
-    private final DigitalInput leftLimitSwitchTop;
-    private final DigitalInput leftLimitSwitchBottom;
-
-    private final DigitalInput rightLimitSwitchTop;
-    private final DigitalInput rightLimitSwitchBottom;
+//    private final RelativeEncoder rightEncoder;
+//    private final RelativeEncoder leftEncoder;
+//
+//    private final DigitalInput leftLimitSwitchTop;
+//    private final DigitalInput leftLimitSwitchBottom;
+//
+//    private final DigitalInput rightLimitSwitchTop;
+//    private final DigitalInput rightLimitSwitchBottom;
 
     private double targetAngle;
 
@@ -44,22 +44,22 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift.restoreFactoryDefaults();
         leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
-        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
-        rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
-        rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
+//        leftLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchTop);
+//        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
+//        rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
+//        rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
         leftAbsoluteEncoder = leftLift.getAbsoluteEncoder();
         rightAbsoluteEncoder = rightLift.getAbsoluteEncoder();
         leftAbsoluteEncoder.setPositionConversionFactor((35.79)/42.95); //Dummy conversion factor
         rightAbsoluteEncoder.setPositionConversionFactor(123134123); //Dummy conversion factor
-        rightEncoder = rightLift.getEncoder();
-        leftEncoder = leftLift.getEncoder();
-        rightEncoder.setPositionConversionFactor(28/40.09); 
-        leftEncoder.setPositionConversionFactor(28/40.09);  //rotations to angles
-        rightEncoder.setPosition(53);
-        leftEncoder.setPosition(53);
+//        rightEncoder = rightLift.getEncoder();
+//        leftEncoder = leftLift.getEncoder();
+//        rightEncoder.setPositionConversionFactor(28/40.09);
+//        leftEncoder.setPositionConversionFactor(28/40.09);  //rotations to angles
+//        rightEncoder.setPosition(53);
+//        leftEncoder.setPosition(53);
         PIDController = rightLift.getPIDController();
-        PIDController.setFeedbackDevice(rightEncoder);
+        PIDController.setFeedbackDevice(rightAbsoluteEncoder);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
               PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
         leftLift.follow(rightLift,false);
@@ -102,7 +102,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Actually do the math here to get the true angle of the elevator relative to the ground
     public double getAngle(){
-        return rightEncoder.getPosition();
+        return rightAbsoluteEncoder.getPosition();
     }
 
     public void set(double p, double i, double d, double f, double iz)
@@ -212,8 +212,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             //rightEncoder.setPosition(22);
             leftLift.set(0);
             rightLift.set(0);
-            leftEncoder.setPosition(25);
-            rightEncoder.setPosition(25);
+//            leftEncoder.setPosition(25);
+//            rightEncoder.setPosition(25);
         }));
     }
 
@@ -223,8 +223,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             //rightEncoder.setPosition(57);
             leftLift.set(0);
             rightLift.set(0);
-            leftEncoder.setPosition(53);
-            rightEncoder.setPosition(53);
+//            leftEncoder.setPosition(53);
+//            rightEncoder.setPosition(53);
         }));
     }
 
@@ -242,12 +242,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Lower Limit Switch Right", rightLimitSwitchBottom.get() ? 1 : 0);
-        SmartDashboard.putNumber("Upper Limit Switch Right", rightLimitSwitchTop.get() ? 1 : 0);
-        SmartDashboard.putNumber("Lower Limit Switch Left", leftLimitSwitchBottom.get() ? 1 : 0);
-        SmartDashboard.putNumber("Upper Limit Switch Left", leftLimitSwitchTop.get() ? 1 : 0);
-        SmartDashboard.putNumber("Right Position", rightEncoder.getPosition());
-        SmartDashboard.putNumber("Left Position", leftEncoder.getPosition());
+//        SmartDashboard.putNumber("Lower Limit Switch Right", rightLimitSwitchBottom.get() ? 1 : 0);
+//        SmartDashboard.putNumber("Upper Limit Switch Right", rightLimitSwitchTop.get() ? 1 : 0);
+//        SmartDashboard.putNumber("Lower Limit Switch Left", leftLimitSwitchBottom.get() ? 1 : 0);
+//        SmartDashboard.putNumber("Upper Limit Switch Left", leftLimitSwitchTop.get() ? 1 : 0);
+        SmartDashboard.putNumber("Right Position", rightAbsoluteEncoder.getPosition());
+        SmartDashboard.putNumber("Left Position", leftAbsoluteEncoder.getPosition());
 
     }
 

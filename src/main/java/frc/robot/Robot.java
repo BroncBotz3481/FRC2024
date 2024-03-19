@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
     CameraServer.startAutomaticCapture();
-    colorWidget = Shuffleboard.getTab("LiveWindow").add("Color", false);
+//    colorWidget = Shuffleboard.getTab("LiveWindow").add("Color", false);
   }
 
   /**

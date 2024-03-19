@@ -46,6 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooter = new TalonSRX(Constants.ShooterConstants.rightShooterID);
         leftShooter.setInverted(true);
         leftShooter.follow(rightShooter);
+        leftShooter.setSensorPhase(true); // <<<<<< Adjust this
+        rightShooter.setSensorPhase(false); // <<<<<< Adjust this
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE, PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
         // leftShooter = new CANSparkMax(Constants.ShooterConstants.leftShooterID, CANSparkLowLevel.MotorType.kBrushless);
         // rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkLowLevel.MotorType.kBrushless);
@@ -115,7 +117,7 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooter.config_kD(slotIdx.VELOCITY.ordinal(), d);
         rightShooter.config_kF(slotIdx.VELOCITY.ordinal(), f);
         rightShooter.config_IntegralZone(slotIdx.VELOCITY.ordinal(), iz);
-        rightShooter.configAllowableClosedloopError(slotIdx.VELOCITY.ordinal(), pidIdx.PRIMARY.ordinal());
+        rightShooter.configAllowableClosedloopError(slotIdx.VELOCITY.ordinal(), pidIdx.PRIMARY.ordinal());  // second parameter is absolute value of allowable error
         rightShooter.configClosedLoopPeriod(slotIdx.VELOCITY.ordinal(), 1);
         rightShooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20, 50);
         rightShooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, 50);
@@ -140,9 +142,18 @@ public class ShooterSubsystem extends SubsystemBase {
        return rightShooter.getMotorOutputPercent();
     }
 
+    public boolean rampedUp(){
+        double error = Math.abs(getSpeed()-this.target_Speed);
+        return error<=150; // error is less than x rpm
+        // If getSpeed() is within acceptable error
+    }
+
+
     public Command shootIt(double targetSpeed){
         this.target_Speed = targetSpeed;
-        return run(() -> runPID(targetSpeed));
+        return run(() -> {
+            runPID(targetSpeed);
+        });
     }
 
     public Command manualShoot(double power){

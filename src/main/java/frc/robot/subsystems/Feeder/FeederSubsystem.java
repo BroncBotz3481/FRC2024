@@ -11,14 +11,14 @@ public class FeederSubsystem extends SubsystemBase {
 
     private final CANSparkMax feederMotor;
 
-    //private final DigitalInput beamBrake;
+    private final DigitalInput beamBrake;
 
 
     public FeederSubsystem() {
         feederMotor = new CANSparkMax(Constants.FeederConstants.feederMotorID, CANSparkLowLevel.MotorType.kBrushless);
         feederMotor.restoreFactoryDefaults();
         feederMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        //beamBrake = new DigitalInput(Constants.FeederConstants.beamBrakeChannel);
+        beamBrake = new DigitalInput(Constants.FeederConstants.beamBrakeChannel);
     }
 
     public void setSpeed(double fPower) {
@@ -49,15 +49,20 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public boolean getBeamBrakeState(){
-        return true;
-        //return beamBrake.get();
+        return beamBrake.get();
     }
 
 
-    public Command runFeeder(double targetSpeed){
-        return run(()-> {
-            setSpeed(targetSpeed);
-        });
+    public Command runFeeder(double targetSpeed, boolean ignoreBeambreak){
+        if(ignoreBeambreak || getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
+            return run(() -> {
+                setSpeed(targetSpeed);
+            });
+        } else {
+            return run(() -> {
+                setSpeed(0);
+            });
+        }
     }
 
     @Override
