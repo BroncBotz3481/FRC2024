@@ -18,22 +18,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid To E2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "StartStagedNote"
-                }
-              }
-            ]
+            "pathName": "Mid To E2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartStageNote"
           }
         }
       ]
