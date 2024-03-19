@@ -206,26 +206,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public Command lowerElevator() { 
-        return run(() -> {rightLift.set(-0.15); leftLift.set(-0.15);}).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
+        return run(() -> {
+            rightLift.set(-0.15); leftLift.set(-0.15);
+        });//.until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
             // leftEncoder.setPosition(0);
             //leftEncoder.setPosition(22);
             //rightEncoder.setPosition(22);
-            leftLift.set(0);
-            rightLift.set(0);
+            //leftLift.set(0);
+            //rightLift.set(0);
 //            leftEncoder.setPosition(25);
 //            rightEncoder.setPosition(25);
-        }));
+        
     }
 
     public Command raiseElevator() {
-        return run(() -> {rightLift.set(0.15); leftLift.set(0.15);}).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
+        return run(() -> {
+            rightLift.set(0.15); leftLift.set(0.15);
+        });//.until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
             //leftEncoder.setPosition(57);
             //rightEncoder.setPosition(57);
-            leftLift.set(0);
-            rightLift.set(0);
+            //leftLift.set(0);
+            //rightLift.set(0);
 //            leftEncoder.setPosition(53);
 //            rightEncoder.setPosition(53);
-        }));
+
     }
 
     public enum ElevatorState {

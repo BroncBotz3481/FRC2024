@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -67,6 +68,10 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
     Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
     configureBindings(); // Configure the trigger bindings
+    DigitalInput beamBrakeSensor = new DigitalInput(5);
+    if (beamBrakeSensor.get()){
+      
+    }
   }
 
   /**
@@ -94,17 +99,17 @@ public class RobotContainer {
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
     // new Trigger(null)
-    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.5));
+    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, true));
     Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
     Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
-    Constants.operatorController.b().whileTrue(new ParallelCommandGroup(m_intake.runIntake(-0.8), m_feeder.runFeeder(0.7)));
+    Constants.operatorController.b().whileTrue(new ParallelCommandGroup(m_intake.runIntake(-0.8), m_feeder.runFeeder(0.7, false)));
     Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
     Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
     //Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
     Constants.operatorController.leftBumper().whileTrue(m_shooter.manualShoot(0.8));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7)));
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, false)));
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.8));  
     Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.8));    
@@ -161,11 +166,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
     NamedCommands.registerCommand("ShootNote", new AutoShooter(m_shooter, m_feeder));
     NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5500));
-    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.15));
+    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.15, false));
 
     NamedCommands.registerCommand("StopShooter", m_shooter.manualShoot(0));
 
-    NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0));
+    NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0, false));
     m_drivebase.setupPathPlanner();
   }
 

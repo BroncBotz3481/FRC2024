@@ -37,7 +37,7 @@ public class Superstructure {
         m_LED = LED;
         m_swerve = swerve;
        m_climber.setDefaultCommand(m_climber.setBothSpeeds(0));
-       m_feeder.setDefaultCommand(m_feeder.runFeeder(FeederSubsystem.FeederState.OFF.power));
+       m_feeder.setDefaultCommand(m_feeder.runFeeder(0, false));
        m_intake.setDefaultCommand(m_intake.stopIntaking());
        m_shooter.setDefaultCommand(m_shooter.shootIt(ShooterSubsystem.ShooterState.OFF.speed));
        m_elevator.setDefaultCommand(m_elevator.stopManual());
