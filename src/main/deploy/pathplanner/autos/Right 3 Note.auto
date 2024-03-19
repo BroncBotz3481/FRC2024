@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "E1 To Right Speaker Score"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "E1 To Right Speaker Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StageNoteCmd"
+                }
+              }
+            ]
           }
         },
         {

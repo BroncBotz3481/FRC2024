@@ -12,6 +12,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.StartIntakeCmd;
+import frc.robot.commands.StartStageNoteCmd;
+import frc.robot.commands.StopStageNoteCmd;
+import frc.robot.commands.StartShooterCmd;
+import frc.robot.commands.StopShooterCmd;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
@@ -171,6 +176,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopShooter", m_shooter.manualShoot(0));
 
     NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0, false));
+    NamedCommands.registerCommand("StartStagedNote", new StartStageNoteCmd(m_feeder, m_intake));
+    NamedCommands.registerCommand("StartIntake", new StartIntakeCmd(m_intake));
+    NamedCommands.registerCommand("StopStagedNote", new StopStageNoteCmd(m_feeder, m_intake));
+    NamedCommands.registerCommand("StartShooter", new StartShooterCmd(m_shooter));
+    NamedCommands.registerCommand("StopShooter", new StopShooterCmd(m_shooter));
     m_drivebase.setupPathPlanner();
   }
 

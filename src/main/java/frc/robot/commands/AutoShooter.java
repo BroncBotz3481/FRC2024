@@ -37,8 +37,9 @@ public class AutoShooter extends Command {
   @Override
   public void execute() {
     System.out.println(timer.get());
-    m_shooter.runPID(-5500);
-    if (timer.get()>=2)
+    //m_shooter.runPID(-5500);
+    m_shooter.shoot(0.8);
+    if (timer.get()>=2) //|| m_shooter.getSpeed() <= -5400
       m_feeder.setSpeed(0.8);
   }
 
@@ -54,6 +55,6 @@ public class AutoShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>=4.5;
+    return timer.get()>=3;
   }
 }
