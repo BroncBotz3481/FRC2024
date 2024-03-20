@@ -65,15 +65,13 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public Command runFeeder(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
-        if(ignoreBeambreak || !getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
-            return run(() -> {
+         // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
+        return run(() -> {
+            if(ignoreBeambreak || !getBeamBrakeState())  // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
                 setSpeed(fTargetSpeed, iTargetSpeed);
-            });
-        } else {
-            return run(() -> {
-                stopFeeder();
-            });
-        }
+            else 
+                stopFeeder();   
+            }); 
     }
 
     public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
