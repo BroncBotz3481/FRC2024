@@ -24,9 +24,33 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootFirstNote"
+            "pathName": "E2 To Mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid To E1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E1 To Mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid To E4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E4 To Mid"
           }
         }
       ]
