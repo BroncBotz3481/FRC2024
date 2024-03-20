@@ -1,7 +1,6 @@
 package frc.robot.subsystems.superstructure;
 
 import frc.robot.subsystems.Elevator.ElevatorSubsystem.ElevatorState;
-import frc.robot.subsystems.Intake.IntakeSubsystem.IntakeState;
 import frc.robot.subsystems.Feeder.FeederSubsystem.FeederState;
 import frc.robot.subsystems.Shooter.ShooterSubsystem.ShooterState;
 import frc.robot.subsystems.Climber.ClimberSubsystem.ClimberState;

@@ -5,12 +5,18 @@
       "x": 0.5914513989765701,
       "y": 2.131842790045313
     },
-    "rotation": 0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
         {
           "type": "path",
           "data": {

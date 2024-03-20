@@ -3,18 +3,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
-import frc.robot.subsystems.Intake.IntakeSubsystem;
 
 public class StopStageNoteCmd extends Command {
     private FeederSubsystem m_feeder;
-    private IntakeSubsystem m_intake;
     private Timer timer;
 
-    public StopStageNoteCmd(FeederSubsystem feeder, IntakeSubsystem intake) {
+    public StopStageNoteCmd(FeederSubsystem feeder) {
         m_feeder = feeder;
-        m_intake = intake;
         addRequirements(m_feeder);
-        addRequirements(m_intake);
     }
 
     // Called when the command is initially scheduled.
@@ -27,8 +23,7 @@ public class StopStageNoteCmd extends Command {
     @Override
     public void execute() {
         System.out.println(timer.get());
-        m_intake.runIntake(0);
-        m_feeder.setSpeed(0);
+        m_feeder.setSpeed(0, 0);
     }
 
     @Override

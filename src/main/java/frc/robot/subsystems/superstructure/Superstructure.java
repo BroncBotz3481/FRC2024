@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
-import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.LED.LEDSubsystem;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
@@ -18,7 +17,6 @@ public class Superstructure {
     public final ElevatorSubsystem m_elevator;
     public final SwerveSubsystem m_swerve;
     public final LEDSubsystem m_LED;
-    public final IntakeSubsystem m_intake;
 
     public SuperState m_prevState = SuperState.SAFE;
 
@@ -27,18 +25,16 @@ public class Superstructure {
 
 
     public Superstructure(ClimberSubsystem climber, FeederSubsystem feeder,
-                          ShooterSubsystem shooter, ElevatorSubsystem elevator, IntakeSubsystem intake, LEDSubsystem LED,
+                          ShooterSubsystem shooter, ElevatorSubsystem elevator, LEDSubsystem LED,
                           SwerveSubsystem swerve) {
         m_climber = climber;
         m_feeder = feeder;
-        m_intake = intake;
         m_shooter = shooter;
         m_elevator = elevator;
         m_LED = LED;
         m_swerve = swerve;
        m_climber.setDefaultCommand(m_climber.setBothSpeeds(0));
-       m_feeder.setDefaultCommand(m_feeder.runFeeder(0, false));
-       m_intake.setDefaultCommand(m_intake.stopIntaking());
+       m_feeder.setDefaultCommand(m_feeder.runFeeder(0, 0, false));
        m_shooter.setDefaultCommand(m_shooter.shootIt(ShooterSubsystem.ShooterState.OFF.speed));
        m_elevator.setDefaultCommand(m_elevator.stopManual());
 //      m_elevator.setDefaultCommand(m_elevator.setAngle(ElevatorSubsystem.ElevatorState.MAXANGLE.angle));

@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "ShootFirstNote"
           }
         },
         {
@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StartStageNote"
+            "name": "ShootFirstNote"
           }
         }
       ]

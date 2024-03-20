@@ -29,7 +29,7 @@ public class AutoShooter extends Command {
   @Override
   public void initialize() {
     m_shooter.shoot(0);
-    m_feeder.setSpeed(0);
+    m_feeder.setSpeed(0, 0);
     timer.start();
   }
 
@@ -39,22 +39,22 @@ public class AutoShooter extends Command {
     System.out.println(timer.get());
     //m_shooter.runPID(-5500);
     m_shooter.shoot(0.8);
-    if (timer.get()>=2) //|| m_shooter.getSpeed() <= -5400
-      m_feeder.setSpeed(0.8);
+    if (timer.get()>=1) //|| m_shooter.getSpeed() <= -5400
+      m_feeder.setSpeed(0.8, 0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return timer.get()>=2;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_shooter.shoot(0);
-    m_feeder.setSpeed(0);
+    m_feeder.setSpeed(0, 0);
     timer.stop();
     timer.reset();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return timer.get()>=3;
   }
 }

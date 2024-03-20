@@ -10,22 +10,15 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.StartIntakeCmd;
-import frc.robot.commands.StartStageNoteCmd;
-import frc.robot.commands.StopStageNoteCmd;
-import frc.robot.commands.StartShooterCmd;
-import frc.robot.commands.StopShooterCmd;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Feeder.FeederSubsystem;
-import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.LED.LEDSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.superstructure.*;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.math.MathUtil;
@@ -33,10 +26,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AutoShooter;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -54,7 +44,6 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final LEDSubsystem m_LED = new LEDSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   private final SwerveSubsystem m_drivebase = SwerveSubsystem.getInstance();
 
@@ -63,7 +52,6 @@ public class RobotContainer {
                                                                   m_feeder,
                                                                   m_shooter,
                                                                   m_elevator,
-                                                                  m_intake,
                                                                   m_LED,
                                                                   m_drivebase);
 
@@ -104,17 +92,17 @@ public class RobotContainer {
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
     // new Trigger(null)
-    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, true));
+    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, 0, true));
+    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(0.8, -0.8, false));
     Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
     Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
-    Constants.operatorController.b().whileTrue(new ParallelCommandGroup(m_intake.runIntake(-0.8), m_feeder.runFeeder(0.7, false)));
     Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
     Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));
     //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
    // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
     //Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
     Constants.operatorController.leftBumper().whileTrue(m_shooter.manualShoot(0.8));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, false)));
+    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, 0, false)));
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.8));  
     Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.8));    
@@ -166,22 +154,26 @@ public class RobotContainer {
 
   public void configurePathPlanner() {
     // TODO: These are example NamedCommands, import the real NamedCommands from the `swerve` branch
-    NamedCommands.registerCommand("Ground Intake",
-            superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
-    NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
-    NamedCommands.registerCommand("ShootNote", new AutoShooter(m_shooter, m_feeder));
-    NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5500));
-    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.15, false));
+//    NamedCommands.registerCommand("Ground Intake",
+//            superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
+//    NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));
+//    NamedCommands.registerCommand("TestShoot1", m_shooter.shootIt(-5500));
+//    NamedCommands.registerCommand("StopShooter", m_shooter.manualShoot(0));
+//    NamedCommands.registerCommand("RunFeeder", m_feeder.runFeeder(0.15, false));
+//    NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0, false));
+//    NamedCommands.registerCommand("StartIntake", new StartIntakeCmd(m_intake));
+    NamedCommands.registerCommand("RunShooterTest", new RunCommand(() ->{
+      m_shooter.shoot(.5);}));
+    m_drivebase.setupPathPlanner();
 
-    NamedCommands.registerCommand("StopShooter", m_shooter.manualShoot(0));
-
-    NamedCommands.registerCommand("StopFeeder", m_feeder.runFeeder(0, false));
-    NamedCommands.registerCommand("StartStagedNote", new StartStageNoteCmd(m_feeder, m_intake));
-    NamedCommands.registerCommand("StartIntake", new StartIntakeCmd(m_intake));
-    NamedCommands.registerCommand("StopStagedNote", new StopStageNoteCmd(m_feeder, m_intake));
+    NamedCommands.registerCommand("ShootFirstNote", new AutoShooter(m_shooter, m_feeder));
+    NamedCommands.registerCommand("StageSubNote", new StageSubNoteCmd(m_feeder, m_shooter));
+//    NamedCommands.registerCommand("ShootStagedNote", new ShootStagedNoteCmd(m_feeder, m_shooter));
+    NamedCommands.registerCommand("StartStagedNote", new StartStageNoteCmd(m_feeder));
+    NamedCommands.registerCommand("StopStagedNote", new StopStageNoteCmd(m_feeder));
     NamedCommands.registerCommand("StartShooter", new StartShooterCmd(m_shooter));
     NamedCommands.registerCommand("StopShooter", new StopShooterCmd(m_shooter));
-    m_drivebase.setupPathPlanner();
+
   }
 
   /**

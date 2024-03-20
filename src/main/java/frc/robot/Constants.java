@@ -71,9 +71,6 @@ public final class Constants {
 
     public static final int beamBrakeChannel = 3;
 
-  }
-
-  public static class IntakeConstants {
     public static final int intakeMotorID = 24;
     public static final int forwardChannelPort = 1;
     public static final int reverseChannelPort = 0;

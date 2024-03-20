@@ -3,27 +3,40 @@ package frc.robot.subsystems.Elevator;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+
 import java.util.function.DoubleSupplier;
 
 public class ElevatorSubsystem extends SubsystemBase {
+
 
     private final CANSparkMax leftLift;
 
     private final CANSparkMax rightLift;
 
-    private final SparkPIDController PIDController;
+//    private final SparkPIDController PIDController;
+//
+//    private final SparkAbsoluteEncoder leftAbsoluteEncoder;
+//    private final SparkAbsoluteEncoder rightAbsoluteEncoder;
 
-    private final SparkAbsoluteEncoder leftAbsoluteEncoder;
-    private final SparkAbsoluteEncoder rightAbsoluteEncoder;
+    private final DutyCycleEncoder encoder = new DutyCycleEncoder(0); //Find the correct channels that the encoder is plugged in
+
+    private final TrapezoidProfile.Constraints m_constraints = new TrapezoidProfile.Constraints(PIDF.MAXVELOCITY, PIDF.MAXACCELERATION);
+
+    private final ProfiledPIDController m_controller =  new ProfiledPIDController(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE, m_constraints);
 
 //    private final RelativeEncoder rightEncoder;
 //    private final RelativeEncoder leftEncoder;
@@ -48,20 +61,20 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        leftLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.leftLimitSwitchBottom);
 //        rightLimitSwitchTop = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchTop);
 //        rightLimitSwitchBottom = new DigitalInput(Constants.ElevatorConstants.rightLimitSwitchBottom);
-        leftAbsoluteEncoder = leftLift.getAbsoluteEncoder();
-        rightAbsoluteEncoder = rightLift.getAbsoluteEncoder();
-        leftAbsoluteEncoder.setPositionConversionFactor((35.79)/42.95); //Dummy conversion factor
-        rightAbsoluteEncoder.setPositionConversionFactor(123134123); //Dummy conversion factor
+//        leftAbsoluteEncoder = leftLift.getAbsoluteEncoder();
+//        rightAbsoluteEncoder = rightLift.getAbsoluteEncoder();
+//        leftAbsoluteEncoder.setPositionConversionFactor((35.79)/42.95); //Dummy conversion factor
+//        rightAbsoluteEncoder.setPositionConversionFactor(123134123); //Dummy conversion factor
 //        rightEncoder = rightLift.getEncoder();
 //        leftEncoder = leftLift.getEncoder();
 //        rightEncoder.setPositionConversionFactor(28/40.09);
 //        leftEncoder.setPositionConversionFactor(28/40.09);  //rotations to angles
 //        rightEncoder.setPosition(53);
 //        leftEncoder.setPosition(53);
-        PIDController = rightLift.getPIDController();
-        PIDController.setFeedbackDevice(rightAbsoluteEncoder);
-        set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
-              PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
+//        PIDController = rightLift.getPIDController();
+//        PIDController.setFeedbackDevice(rightAbsoluteEncoder);
+//        set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
+//              PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
         leftLift.follow(rightLift,false);
         leftLift.burnFlash();
         rightLift.burnFlash();
@@ -89,6 +102,14 @@ public class ElevatorSubsystem extends SubsystemBase {
          * Integral zone constant for PID loop
          */
         public static final double INTEGRAL_ZONE = 0;
+        /**
+         * Max velocity for ProfilePID
+         */
+        public static final double MAXVELOCITY = 300000; //Actually find good values for this
+        /**
+         * Max acceleration for ProfilePID
+         */
+        public static final double MAXACCELERATION = 200000; //Actually find good values for this
     }
 
 
@@ -102,21 +123,23 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     //TODO: Actually do the math here to get the true angle of the elevator relative to the ground
     public double getAngle(){
-        return rightAbsoluteEncoder.getPosition();
+        return encoder.getAbsolutePosition();
     }
 
-    public void set(double p, double i, double d, double f, double iz)
-    {
-        PIDController.setP(p);
-        PIDController.setI(i);
-        PIDController.setD(d);
-        PIDController.setFF(f);
-        PIDController.setIZone(iz);
-    }
+//    public void set(double p, double i, double d, double f, double iz)
+//    {
+//        PIDController.setP(p);
+//        PIDController.setI(i);
+//        PIDController.setD(d);
+//        PIDController.setFF(f);
+//        PIDController.setIZone(iz);
+//    }
 
     public void runPID(double targetPosition)
     {
-        PIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+        m_controller.setGoal(targetPosition);
+        rightLift.set(m_controller.calculate(encoder.get()));
+        //PIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
     }
 
     public Command setAngle(double degrees){
@@ -124,72 +147,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         return run(() -> {
             runPID(degrees);
         });
-        // if(targetAngle>=25||targetAngle<=53){
-        //     return run(() -> {
-        //         runPID(degrees);
-        //      }).until(() -> (leftLimitSwitchTop.get() || rightLimitSwitchTop.get() || leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get() || rightEncoder.getPosition()<25 || rightEncoder.getPosition()>53)).andThen(runOnce(() -> {
-        //     leftLift.set(0);
-        //     rightLift.set(0);
-        //     if (leftLimitSwitchTop.get() || rightLimitSwitchTop.get() || rightEncoder.getPosition()>53)
-        //     leftEncoder.setPosition(53);
-        //     rightEncoder.setPosition(53);
-        //     if (leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get() || rightEncoder.getPosition()>25)
-        //     leftEncoder.setPosition(25);
-        //     rightEncoder.setPosition(25);
-        // }));
-        // }else{
-        //     return run(() -> {
-        //     runPID(degrees);
-        // }).until(() -> (leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()) && rightEncoder.getPosition()>25.5).andThen(runOnce(() -> {
-        //     leftLift.set(0);
-        //     rightLift.set(0);
-        //     leftEncoder.setPosition(25);
-        //     rightEncoder.setPosition(25);
-        // }));
-        // }
-
-        // if(leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get())
-        // {
-        //     if(targetAngle >= 53)
-        //         return run(() -> {
-        //                 runPID(degrees);
-        //         }).until(() -> leftLimitSwitchTop.get() || rightLimitSwitchTop.get()).andThen(runOnce(() -> {
-        //             leftLift.set(0);
-        //             rightLift.set(0);
-        //             leftEncoder.setPosition(53);
-        //             rightEncoder.setPosition(53);
-        //         }));
-        //     else
-        //         return run(() -> {
-        //             runPID(degrees);
-        //         });
-
-        // } 
-        // else if(leftLimitSwitchTop.get() || rightLimitSwitchTop.get())
-        // {
-        //     if(targetAngle == 25)
-        //         return run(() -> {
-        //                 runPID(degrees);
-        //         }).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
-        //             leftLift.set(0);
-        //             rightLift.set(0);
-        //             leftEncoder.setPosition(25);
-        //             rightEncoder.setPosition(25);
-        //         }));
-        //     else
-        //         return run(() -> {
-        //             runPID(degrees);
-        //         });
-        // }
-        // if(targetAngle == 25)
-        //         return run(() -> {
-        //                 runPID(degrees);
-        //         }).until(() -> leftLimitSwitchBottom.get() || rightLimitSwitchBottom.get()).andThen(runOnce(() -> {
-        //             leftLift.set(0);
-        //             rightLift.set(0);
-        //             leftEncoder.setPosition(25);
-        //             rightEncoder.setPosition(25);
-        //         }));
     }
 
     public Command runManual(DoubleSupplier supplier){
@@ -250,8 +207,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        SmartDashboard.putNumber("Upper Limit Switch Right", rightLimitSwitchTop.get() ? 1 : 0);
 //        SmartDashboard.putNumber("Lower Limit Switch Left", leftLimitSwitchBottom.get() ? 1 : 0);
 //        SmartDashboard.putNumber("Upper Limit Switch Left", leftLimitSwitchTop.get() ? 1 : 0);
-        SmartDashboard.putNumber("Right Position", rightAbsoluteEncoder.getPosition());
-        SmartDashboard.putNumber("Left Position", leftAbsoluteEncoder.getPosition());
+//        SmartDashboard.putNumber("Right Position", rightAbsoluteEncoder.getPosition());
+//        SmartDashboard.putNumber("Left Position", leftAbsoluteEncoder.getPosition());
 
     }
 
