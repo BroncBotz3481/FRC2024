@@ -174,6 +174,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("StartShooter", new StartShooterCmd(m_shooter));
     NamedCommands.registerCommand("StopShooter", new StopShooterCmd(m_shooter));
 
+    //For the Dummy Auto (Shooting from right in front of the speaker)
+    NamedCommands.registerCommand("TomfooleryPickup", new TomfooleryPickupCmd(m_feeder, m_shooter));
+    NamedCommands.registerCommand("TomfooleryShoot", new TomfooleryShootCmd(m_feeder, m_shooter));
   }
 
   /**

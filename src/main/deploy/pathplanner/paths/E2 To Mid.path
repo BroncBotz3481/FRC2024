@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.45,
+        "x": 2.570201630576601,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.030498306394562,
-        "y": 5.55467744117487
+        "x": 2.186628641383613,
+        "y": 5.55
       },
       "isLocked": false,
-      "linkedName": "Mid"
+      "linkedName": "E2"
     },
     {
       "anchor": {
-        "x": 2.570201630576601,
+        "x": 1.45,
         "y": 5.55
       },
       "prevControl": {
-        "x": 2.1276338812540327,
+        "x": 1.7830293172108966,
         "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "E2"
+      "linkedName": "Mid"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "TomfooleryPickup"
+                "name": "TomfooleryShoot"
               }
             }
           ]
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

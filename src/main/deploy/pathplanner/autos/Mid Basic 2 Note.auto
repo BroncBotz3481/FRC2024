@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.45,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFirstNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid To E2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E2 To Mid"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
