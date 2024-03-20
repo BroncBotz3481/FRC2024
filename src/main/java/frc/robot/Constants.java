@@ -69,12 +69,9 @@ public final class Constants {
   public static class FeederConstants {
     public static final int feederMotorID = 28;
 
-    public static final int beamBrakeChannel = 3;
+    public static final int beamBrakeChannel = 2;
 
     public static final int intakeMotorID = 24;
-    public static final int forwardChannelPort = 1;
-    public static final int reverseChannelPort = 0;
-
   }
   public static class ShooterConstants {
     public static final int leftShooterID = 1;

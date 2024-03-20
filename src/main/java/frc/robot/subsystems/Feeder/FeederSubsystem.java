@@ -3,6 +3,7 @@ package frc.robot.subsystems.Feeder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -59,12 +60,12 @@ public class FeederSubsystem extends SubsystemBase {
 
 
     public boolean getBeamBrakeState(){
-        return beamBrake.get();
+        return !beamBrake.get();
     }
 
 
     public Command runFeeder(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
-        if(ignoreBeambreak || getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
+        if(ignoreBeambreak || !getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
             return run(() -> {
                 setSpeed(fTargetSpeed, iTargetSpeed);
             });
@@ -75,7 +76,7 @@ public class FeederSubsystem extends SubsystemBase {
         }
     }
 
-    public Command runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
+    public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
         if(ignoreBeambreak || getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
             setSpeed(fTargetSpeed, iTargetSpeed);
         } else {
@@ -86,7 +87,7 @@ public class FeederSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //System.out.println("This the power of the feeder: " + getSpeed());
-        //System.out.println("This is the state of the beam brake: " + getBeamBrakeState());
+        System.out.println("This is the state of the beam brake: " + getBeamBrakeState());
     }
 
 }

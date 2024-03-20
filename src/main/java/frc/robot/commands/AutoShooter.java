@@ -40,13 +40,13 @@ public class AutoShooter extends Command {
     //m_shooter.runPID(-5500);
     m_shooter.shoot(0.8);
     if (timer.get()>=1) //|| m_shooter.getSpeed() <= -5400
-      m_feeder.setSpeed(0.8, 0);
+      m_feeder.setSpeed(0.8, -0.8);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>=2;
+    return timer.get()>=3;
   }
 
   // Called once the command ends or is interrupted.

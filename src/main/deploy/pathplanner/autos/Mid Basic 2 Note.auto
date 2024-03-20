@@ -28,6 +28,12 @@
           "data": {
             "pathName": "E2 To Mid"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFirstNote"
+          }
         }
       ]
     }

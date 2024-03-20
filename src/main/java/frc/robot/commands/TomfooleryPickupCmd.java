@@ -16,6 +16,7 @@ public class TomfooleryPickupCmd extends Command {
         m_shooter = shooter;
         addRequirements(m_feeder);
         addRequirements(m_shooter);
+        timer = new Timer();
     }
 
     @Override
@@ -33,7 +34,7 @@ public class TomfooleryPickupCmd extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.get()>=2; //2 Sec Pickup to stage note(SHOULD NOT SHOOT) Shooter also ramped up
+        return timer.get()>=3; //2 Sec Pickup to stage note(SHOULD NOT SHOOT) Shooter also ramped up
     }
 
     @Override

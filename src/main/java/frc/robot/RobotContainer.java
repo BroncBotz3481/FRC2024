@@ -92,7 +92,7 @@ public class RobotContainer {
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
     // new Trigger(null)
-    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, 0, true));
+    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, -0.8, true));//override
     Constants.operatorController.b().whileTrue(m_feeder.runFeeder(0.8, -0.8, false));
     Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
     Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());

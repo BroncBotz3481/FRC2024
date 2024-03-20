@@ -16,6 +16,7 @@ public class TomfooleryShootCmd extends Command {
         m_shooter = shooter;
         addRequirements(m_feeder);
         addRequirements(m_shooter);
+        timer = new Timer();
     }
 
     @Override
