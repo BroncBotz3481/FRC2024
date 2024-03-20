@@ -61,10 +61,7 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
     Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
     configureBindings(); // Configure the trigger bindings
-    DigitalInput beamBrakeSensor = new DigitalInput(5);
-    if (beamBrakeSensor.get()){
-      
-    }
+    // new Trigger(m_feeder::getBeamBrakeState).onTrue(m_shooter.runOnce(()->m_shooter.shoot(0.4)));
   }
 
   /**
@@ -143,7 +140,7 @@ public class RobotContainer {
 
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure
     Constants.driverController.a().onTrue(new InstantCommand(m_drivebase::zeroGyro));
-    Constants.driverController.x().onTrue(new InstantCommand(m_drivebase::addFakeVisionReading));
+    Constants.driverController.x().onTrue(m_feeder.runFeederCommand(0.8, -0.8));
     Constants.driverController.b().onTrue(new InstantCommand(m_drivebase::lock));
     Constants.driverController.y().whileTrue(Commands.deferredProxy(() -> m_drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
@@ -165,6 +162,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunShooterTest", new RunCommand(() ->{
       m_shooter.shoot(.5);}));
     m_drivebase.setupPathPlanner();
+
+    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.8, -0.8));
 
     NamedCommands.registerCommand("ShootFirstNote", new AutoShooter(m_shooter, m_feeder));
     NamedCommands.registerCommand("StageSubNote", new StageSubNoteCmd(m_feeder, m_shooter));

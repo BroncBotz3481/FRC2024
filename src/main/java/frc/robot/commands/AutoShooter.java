@@ -46,7 +46,7 @@ public class AutoShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>=3;
+    return timer.get()>=2;
   }
 
   // Called once the command ends or is interrupted.

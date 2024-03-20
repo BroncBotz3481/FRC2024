@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Mid To E2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid To E2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedNote"
+                }
+              }
+            ]
           }
         },
         {

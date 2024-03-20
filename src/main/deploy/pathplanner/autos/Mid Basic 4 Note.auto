@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Mid To E2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid To E2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedNote"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,9 +43,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Mid To E1"
+            "name": "ShootFirstNote"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid To E1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedNote"
+                }
+              }
+            ]
           }
         },
         {
@@ -42,15 +74,40 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Mid To E4"
+            "name": "ShootFirstNote"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid To E4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedNote"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "E4 To Mid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFirstNote"
           }
         }
       ]

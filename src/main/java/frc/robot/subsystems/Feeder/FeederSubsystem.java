@@ -75,17 +75,22 @@ public class FeederSubsystem extends SubsystemBase {
     }
 
     public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
-        if(ignoreBeambreak || getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
+        if(ignoreBeambreak || !getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
             setSpeed(fTargetSpeed, iTargetSpeed);
         } else {
             stopFeeder();
         }
     }
 
+    public Command runFeederCommand(double fTargetSpeed, double iTargetSpeed)
+    {
+        return run(() -> {setSpeed(fTargetSpeed, iTargetSpeed);}).until(this::getBeamBrakeState).andThen(runOnce(this::stopFeeder));
+    }
+
     @Override
     public void periodic() {
         //System.out.println("This the power of the feeder: " + getSpeed());
-        System.out.println("This is the state of the beam brake: " + getBeamBrakeState());
+        // System.out.println("This is the state of the beam brake: " + getBeamBrakeState());
     }
 
 }
