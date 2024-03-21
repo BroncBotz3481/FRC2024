@@ -2,6 +2,8 @@ package frc.robot.subsystems.Shooter;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.*;
@@ -46,8 +48,11 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooter = new TalonSRX(Constants.ShooterConstants.rightShooterID);
         leftShooter.setInverted(true);
         leftShooter.follow(rightShooter);
+        rightShooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         leftShooter.setSensorPhase(true); // <<<<<< Adjust this
         rightShooter.setSensorPhase(false); // <<<<<< Adjust this
+        rightShooter.setNeutralMode(NeutralMode.Coast);
+        leftShooter.setNeutralMode(NeutralMode.Coast);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE, PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
         // leftShooter = new CANSparkMax(Constants.ShooterConstants.leftShooterID, CANSparkLowLevel.MotorType.kBrushless);
         // rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkLowLevel.MotorType.kBrushless);
@@ -78,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Proportion constant for PID loop
          */
-        public static final double PROPORTION    = 0; //0.0001
+        public static final double PROPORTION    = 0.55; //0.0001
         /**
          * Integral constant for PID loop
          */
@@ -86,7 +91,7 @@ public class ShooterSubsystem extends SubsystemBase {
         /**
          * Derivative constant for PID loop
          */
-        public static final double DERIVATIVE    = 0;
+        public static final double DERIVATIVE    = 0.15;
         /**
          * Integral zone constant for PID loop
          */
@@ -152,8 +157,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command shootIt(double targetSpeed){
         this.target_Speed = targetSpeed;
         return run(() -> {
-            runPID(targetSpeed);
+            rightShooter.set(ControlMode.Velocity, targetSpeed);
         });
+        /*/.until(() ->rightShooter.getClosedLoopError() < 100)
+        .finallyDo(()->{System.out.println("ending");});*/
     }
 
     public Command manualShoot(double power){

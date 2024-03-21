@@ -50,14 +50,14 @@ public class SuperstructureToState extends SequentialCommandGroup {
 
         Command shooterCmd = Commands.waitUntil(m_shooterWait).andThen(superstructure.m_shooter.shootIt(m_targetState.shoot.speed).until(m_shooterUntil));
         Command feederCmd = Commands.waitUntil(m_feederWait).andThen(superstructure.m_feeder.runFeeder(0, 0, false).until(m_feederUntil));
-        Command elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
+        // Command elevatorCmd = Commands.waitUntil(m_elevatorWait).andThen(superstructure.m_elevator.setAngle(m_targetState.elevator.angle).until(m_elevatorUntil));
         //Command intakeCmd = Commands.waitUntil(m_intakeWait).andThen(superstructure.m_intake.positionIntake(m_targetState.intake.position).andThen(superstructure.m_intake.runIntake(m_targetState.intake.power)).until(m_intakeUntil));
         Command climberCmd = Commands.waitUntil(m_climberWait).andThen(superstructure.m_climber.setHeight(m_targetState.climb.height)).until(m_climberUntil);
 
 
         ParallelCommandGroup commandGroup = new ParallelCommandGroup(shooterCmd,
                                                                      feederCmd,
-                                                                     elevatorCmd,
+                                                                    //  elevatorCmd,
                                                                      climberCmd
                                                                     );
 
@@ -72,19 +72,19 @@ public class SuperstructureToState extends SequentialCommandGroup {
         ElevatorSubsystem elevator = m_superstructure.m_elevator;
 
         if(m_targetState == SuperState.SHOOT_AMP) {
-            m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
+            // m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
         }
 
         if(m_targetState == SuperState.SHOOT_SPEAKER) {
-            m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
+            // m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
         }
 
         if(m_targetState == SuperState.SHOOT_PROTECTED) {
-            m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
+            // m_feederWait = () -> (elevator.getAngle() >= m_targetState.elevator.angle && shooter.getSpeed() >= m_targetState.shoot.speed);
         }
 
         if (m_targetState == SuperState.SOURCE_INTAKE) {
-            m_shooterWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle));
+            // m_shooterWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle));
             m_shooterUntil = feeder::getBeamBrakeState;
             m_feederWait = () -> true;
             m_feederUntil = feeder::getBeamBrakeState;
@@ -97,7 +97,7 @@ public class SuperstructureToState extends SequentialCommandGroup {
         // }
 
         if (m_targetState == SuperState.CLIMB_REACH) {
-            m_climberWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle));
+            // m_climberWait = () -> (elevator.getAngle() >= (m_targetState.elevator.angle));
         }
 
     }
