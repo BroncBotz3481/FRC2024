@@ -10,13 +10,13 @@ import frc.robot.subsystems.Feeder.FeederSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 
 
-public class AutoShooter extends Command {
+public class ShootFirstNote extends Command {
 
   private ShooterSubsystem m_shooter;
   private FeederSubsystem m_feeder;
   private Timer timer;
   /** Creates a new AutoShooter. */
-  public AutoShooter(ShooterSubsystem shooter, FeederSubsystem feeder) {
+  public ShootFirstNote(ShooterSubsystem shooter, FeederSubsystem feeder) {
     m_shooter = shooter;
     m_feeder = feeder;
     timer = new Timer();
@@ -40,13 +40,13 @@ public class AutoShooter extends Command {
     //m_shooter.runPID(-5500);
     m_shooter.shoot(0.8);
     if (timer.get()>=1) //|| m_shooter.getSpeed() <= -5400
-      m_feeder.setSpeed(0.8, -0.8);
+      m_feeder.setSpeed(0.9, -0.9);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>=2;
+    return timer.get()>=1.5;
   }
 
   // Called once the command ends or is interrupted.

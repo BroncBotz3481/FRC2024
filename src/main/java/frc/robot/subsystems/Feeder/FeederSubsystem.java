@@ -74,18 +74,18 @@ public class FeederSubsystem extends SubsystemBase {
             }); 
     }
 
-    public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
-        if(ignoreBeambreak || !getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
-            setSpeed(fTargetSpeed, iTargetSpeed);
-        } else {
-            stopFeeder();
-        }
-    }
-
     public Command runFeederCommand(double fTargetSpeed, double iTargetSpeed)
     {
         return run(() -> {setSpeed(fTargetSpeed, iTargetSpeed);}).until(this::getBeamBrakeState).andThen(runOnce(this::stopFeeder));
     }
+
+    // public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
+    //         if(ignoreBeambreak || !getBeamBrakeState()) { // This assumes that beambreak == true when note is present. If beambreak == false when note is present, add a !
+    //             setSpeed(fTargetSpeed, iTargetSpeed);
+    //         } else {
+    //             stopFeeder();
+    //         }
+    //     }
 
     @Override
     public void periodic() {

@@ -167,9 +167,6 @@ public class RobotContainer {
       m_shooter.shoot(.5);}));
     m_drivebase.setupPathPlanner();
 
-    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.8, -0.8));
-
-    NamedCommands.registerCommand("ShootFirstNote", new AutoShooter(m_shooter, m_feeder));
     NamedCommands.registerCommand("StageSubNote", new StageSubNoteCmd(m_feeder, m_shooter));
 //    NamedCommands.registerCommand("ShootStagedNote", new ShootStagedNoteCmd(m_feeder, m_shooter));
     NamedCommands.registerCommand("StartStagedNote", new StartStageNoteCmd(m_feeder));
@@ -178,8 +175,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopShooter", new StopShooterCmd(m_shooter));
 
     //For the Dummy Auto (Shooting from right in front of the speaker)
+    NamedCommands.registerCommand("ShootFirstNote", new ShootFirstNote(m_shooter, m_feeder));
     NamedCommands.registerCommand("TomfooleryPickup", new TomfooleryPickupCmd(m_feeder, m_shooter));
     NamedCommands.registerCommand("TomfooleryShoot", new TomfooleryShootCmd(m_feeder, m_shooter));
+
+    //For Complex Autos
+    NamedCommands.registerCommand("Auto15SecondShoot", new Auto15SecondShootCmd(m_shooter));
+    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9));
+    NamedCommands.registerCommand("AutoHalfSecondFeeder", new AutoHalfSecondFeederCmd(m_feeder));
   }
 
   /**
