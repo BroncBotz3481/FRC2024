@@ -96,8 +96,8 @@ public class RobotContainer {
     Constants.operatorController.x().onTrue(m_elevator.runElevator(0.0));
     Constants.operatorController.y().onTrue(m_elevator.runElevator(0.09));
 //    Constants.operatorController.z().onTrue(m_elevator.runElevator(0.09));
-//    new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
-//    new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
+   new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
+   new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
     new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_elevator.runElevator(0.0));
     Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
     Constants.operatorController.leftBumper().whileTrue(m_shooter.shootIt(65000));
@@ -108,6 +108,7 @@ public class RobotContainer {
     Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.8));
     Constants.operatorController.povUp().whileTrue(m_climber.setBothSpeeds(-0.8));
     Constants.operatorController.povDown().whileTrue(m_climber.setBothSpeeds(0.8));
+    Constants.driverController.rightBumper().whileTrue(m_drivebase.aimAtSpeaker(1));
 
     //OLD MANUAL COMMANDS NOT USED
     //Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));

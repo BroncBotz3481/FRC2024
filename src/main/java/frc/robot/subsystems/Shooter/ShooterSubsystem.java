@@ -47,30 +47,15 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShooter = new TalonSRX(Constants.ShooterConstants.leftShooterID);
         rightShooter = new TalonSRX(Constants.ShooterConstants.rightShooterID);
         leftShooter.setInverted(true);
-        leftShooter.follow(rightShooter);
+        leftShooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         rightShooter.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-        leftShooter.setSensorPhase(true); // <<<<<< Adjust this
+        // leftShooter.setSensorPhase(true); // <<<<<< Adjust this
+
         rightShooter.setSensorPhase(false); // <<<<<< Adjust this
         rightShooter.setNeutralMode(NeutralMode.Coast);
         leftShooter.setNeutralMode(NeutralMode.Coast);
         set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE, PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
-        // leftShooter = new CANSparkMax(Constants.ShooterConstants.leftShooterID, CANSparkLowLevel.MotorType.kBrushless);
-        // rightShooter = new CANSparkMax(Constants.ShooterConstants.rightShooterID, CANSparkLowLevel.MotorType.kBrushless);
-        // leftShooter.restoreFactoryDefaults();
-        // rightShooter.restoreFactoryDefaults();
-        // leftShooter.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        // rightShooter.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        // rightEncoder = rightShooter.getEncoder();
-        // leftEncoder = leftShooter.getEncoder();
-        // PIDController = rightShooter.getPIDController();
-        // PIDController.setFeedbackDevice(rightEncoder);
-        // set(PIDF.PROPORTION, PIDF.INTEGRAL, PIDF.DERIVATIVE,
-        //         PIDF.FEEDFORWARD, PIDF.INTEGRAL_ZONE);
-        // PIDController.setSmartMotionMaxVelocity(PIDF.MAXVELOCITY, 0);
-        // PIDController.setSmartMotionMaxAccel(PIDF.MAXACCELERATION, 0);
-        // leftShooter.follow(rightShooter,true);
-        // leftShooter.burnFlash();
-        // rightShooter.burnFlash();
+       
     }
 
     public static class PIDF
@@ -109,9 +94,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void shoot(double power){
         rightShooter.set(ControlMode.PercentOutput, power);
+        leftShooter.set(ControlMode.PercentOutput, power);
     }
     public void stop() {
         rightShooter.set(ControlMode.PercentOutput, 0);
+        leftShooter.set(ControlMode.PercentOutput, 0);
     }
 
     public void set(double p, double i, double d, double f, double iz)
@@ -126,17 +113,24 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooter.configClosedLoopPeriod(slotIdx.VELOCITY.ordinal(), 1);
         rightShooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20, 50);
         rightShooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, 50);
-        // PIDController.setP(p);
-        // PIDController.setI(i);
-        // PIDController.setD(d);
-        // PIDController.setFF(f);
-        // PIDController.setIZone(iz);
+
+        leftShooter.selectProfileSlot(slotIdx.VELOCITY.ordinal(), pidIdx.PRIMARY.ordinal()); // First parameter "2" correlates to velocity, second parameter correlates to primary PID
+        leftShooter.config_kP(slotIdx.VELOCITY.ordinal(), p);  // 0.087 First parameter is primary PID, second parameter is velocity
+        leftShooter.config_kI(slotIdx.VELOCITY.ordinal(), i);
+        leftShooter.config_kD(slotIdx.VELOCITY.ordinal(), d);
+        leftShooter.config_kF(slotIdx.VELOCITY.ordinal(), f);
+        leftShooter.config_IntegralZone(slotIdx.VELOCITY.ordinal(), iz);
+        leftShooter.configAllowableClosedloopError(slotIdx.VELOCITY.ordinal(), pidIdx.PRIMARY.ordinal());  // second parameter is absolute value of allowable error
+        leftShooter.configClosedLoopPeriod(slotIdx.VELOCITY.ordinal(), 1);
+        leftShooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20, 50);
+        leftShooter.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, 50);
     }
 
     public void runPID(double targetSpeed)
     {
-        // PIDController.setReference(targetSpeed, CANSparkMax.ControlType.kSmartVelocity);
         rightShooter.set(ControlMode.Velocity, targetSpeed);
+        leftShooter.set(ControlMode.Velocity, targetSpeed);
+
     }
 
     public double getSpeed(){
@@ -158,6 +152,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.target_Speed = targetSpeed;
         return run(() -> {
             rightShooter.set(ControlMode.Velocity, targetSpeed);
+            leftShooter.set(ControlMode.Velocity, targetSpeed);
         });
         /*/.until(() ->rightShooter.getClosedLoopError() < 100)
         .finallyDo(()->{System.out.println("ending");});*/
@@ -184,7 +179,8 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic()
     {
-         SmartDashboard.putNumber("Shooter Velocity", rightShooter.getSelectedSensorVelocity());
+         SmartDashboard.putNumber("Right Shooter Velocity", rightShooter.getSelectedSensorVelocity());
+         SmartDashboard.putNumber("Left Shooter Velocity", leftShooter.getSelectedSensorVelocity());
     }
 
 }
