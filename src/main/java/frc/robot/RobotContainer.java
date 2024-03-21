@@ -89,19 +89,17 @@ public class RobotContainer {
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
     // new Trigger(null)
-    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, -0.8, true));//override
-    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(0.8, -0.8, false));
-    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
-    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
-    new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
-    new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
+    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, -0.8, true)); //override to shoot
+    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(0.8, -0.8, false)); //stage Note
+//    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
+//    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
+    Constants.operatorController.x().onTrue(m_elevator.runElevator(0.0));
+    Constants.operatorController.y().onTrue(m_elevator.runElevator(0.09));
+//    Constants.operatorController.z().onTrue(m_elevator.runElevator(0.09));
+//    new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
+//    new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
     new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_elevator.runElevator(0.0));
     Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
-    // Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));
-    //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
-   // Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
-    //Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
-    // Constants.operatorController.leftBumper().whileTrue(m_shooter.manualShoot(0.8));
     Constants.operatorController.leftBumper().whileTrue(m_shooter.shootIt(65000));
     Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, 0, false)));
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
@@ -110,6 +108,13 @@ public class RobotContainer {
     Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.8));
     Constants.operatorController.povUp().whileTrue(m_climber.setBothSpeeds(-0.8));
     Constants.operatorController.povDown().whileTrue(m_climber.setBothSpeeds(0.8));
+
+    //OLD MANUAL COMMANDS NOT USED
+    //Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));
+    //Constants.operatorController.leftTrigger(0.1).whileTrue(m_intake.manualIntake());
+    //Constants.operatorController.leftBumper().whileTrue(m_intake.stopIntaking());
+    //Constants.operatorController.leftBumper().whileTrue(m_elevator.setAngle(43));
+    //Constants.operatorController.leftBumper().whileTrue(m_shooter.manualShoot(0.8));
 
     // ! ROTATION VALUE IS IN RADIANS, 0 IS AWAY FROM YOU, PI IS TORWARD YOU
     Constants.driverController.povDown().whileTrue(m_drivebase.rotateToHeading(new Rotation2d(Units.degreesToRadians(180))).withTimeout(2));
@@ -143,8 +148,9 @@ public class RobotContainer {
     //Constants.driverController.b().whileTrue(superstructure.toState(SuperState.CLIMB_REACH));
 
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure
+    // Driver Controls
     Constants.driverController.a().onTrue(new InstantCommand(m_drivebase::zeroGyro));
-    Constants.driverController.x().onTrue(m_feeder.runFeederCommand(0.8, -0.8));
+    Constants.driverController.x().onTrue(m_feeder.runFeederCommand(0.8, -0.8)); // TODO change this to operator controller
     Constants.driverController.b().onTrue(new InstantCommand(m_drivebase::lock));
     Constants.driverController.y().whileTrue(Commands.deferredProxy(() -> m_drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
@@ -154,7 +160,6 @@ public class RobotContainer {
   }
 
   public void configurePathPlanner() {
-    // TODO: These are example NamedCommands, import the real NamedCommands from the `swerve` branch
 //    NamedCommands.registerCommand("Ground Intake",
 //            superstructure.toState(SuperState.GROUND_INTAKE).withTimeout(3));
 //    NamedCommands.registerCommand("Safe", superstructure.toState(SuperState.SAFE).withTimeout(3));

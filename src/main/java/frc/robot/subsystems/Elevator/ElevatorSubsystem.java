@@ -171,7 +171,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public Command runElevator(double setpoint)
     {
-        double modified_setpoint = MathUtil.clamp(setpoint, 0, 0.090);
+        double modified_setpoint = MathUtil.clamp(setpoint, 0, 0.090); //Low is 0 and Max angle is 0.090
         m_leftPidController.setGoal(modified_setpoint);
         m_rightPidController.setGoal(modified_setpoint);
         return run(() -> {
