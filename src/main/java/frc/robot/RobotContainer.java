@@ -58,7 +58,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configurePathPlanner();
-    autoChooser = AutoBuilder.buildAutoChooser("Simple Auto");
+    autoChooser = AutoBuilder.buildAutoChooser("Complex");
     Shuffleboard.getTab("Pre-Match").add("Auto Chooser", autoChooser);
     configureBindings(); // Configure the trigger bindings
     // new Trigger(m_feeder::getBeamBrakeState).onTrue(m_shooter.runOnce(()->m_shooter.shoot(0.4)));
@@ -202,8 +202,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Auto15SecondShoot", new Auto15SecondShootCmd(m_shooter));
     NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9));
     NamedCommands.registerCommand("AutoHalfSecondFeeder", new AutoHalfSecondFeederCmd(m_feeder));
-    NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.04));
-    NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.05));
+    NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.07));
+    NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.065));
   }
 
   /**

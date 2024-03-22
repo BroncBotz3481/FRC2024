@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.613888583573923,
-        "y": 4.426587964429507
+        "x": 2.813837166135872,
+        "y": 4.114515152107228
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4259500594167416,
-        "y": 4.494991993094641
+        "x": 2.6258986419786905,
+        "y": 4.182919180772362
       },
       "isLocked": false,
       "linkedName": "Mid Pickup E4"
@@ -20,8 +20,8 @@
         "y": 4.612324515786727
       },
       "prevControl": {
-        "x": 2.3903779831568572,
-        "y": 4.462384567600831
+        "x": 2.4008470058539806,
+        "y": 4.470258285871693
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -20.0,
+    "rotation": -30.0,
     "rotateFast": false
   },
   "reversed": false,
