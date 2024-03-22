@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.23,
-        "y": 6.81
+        "x": 2.264035558954907,
+        "y": 6.797901237861802
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.297120758203919,
-        "y": 6.991075317289794
+        "x": 3.331156317158826,
+        "y": 6.978976555151596
       },
       "isLocked": false,
       "linkedName": "E1 Speaker Score"
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 1.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 400.0

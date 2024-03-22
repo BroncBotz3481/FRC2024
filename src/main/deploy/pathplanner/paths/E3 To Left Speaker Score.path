@@ -3,43 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.570201630576601,
-        "y": 4.077603023064933
+        "x": 2.613888583573923,
+        "y": 4.426587964429507
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3822631064194195,
-        "y": 4.1460070517300665
+        "x": 2.4259500594167416,
+        "y": 4.494991993094641
       },
       "isLocked": false,
-      "linkedName": "E3"
+      "linkedName": "Mid Pickup E4"
     },
     {
       "anchor": {
-        "x": 2.23,
-        "y": 4.28
+        "x": 2.285804041212575,
+        "y": 4.612324515786727
       },
       "prevControl": {
-        "x": 2.3345739419442824,
-        "y": 4.130060051814104
+        "x": 2.3903779831568572,
+        "y": 4.462384567600831
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Speaker Score"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 1.5,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 400.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -23.113721529420058,
+    "rotation": -20.0,
     "rotateFast": false
   },
   "reversed": false,

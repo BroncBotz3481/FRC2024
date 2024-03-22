@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.45,
-        "y": 5.55
+        "x": 2.285804041212575,
+        "y": 4.612324515786727
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.955286976626107,
-        "y": 6.004493131026757
+        "x": 1.9898631023458337,
+        "y": 5.096917960254378
       },
       "isLocked": false,
-      "linkedName": "Mid"
+      "linkedName": "Left Speaker Score"
     },
     {
       "anchor": {
-        "x": 2.673741789366929,
-        "y": 6.743805582114087
+        "x": 2.6569566637058077,
+        "y": 5.560138984352676
       },
       "prevControl": {
-        "x": 2.3058069611805165,
-        "y": 6.335172557288728
+        "x": 1.9030436931723473,
+        "y": 5.617312585638355
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mid Pickup E1"
+      "linkedName": "Pickup E2 From E3"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.15,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 50.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -20.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
