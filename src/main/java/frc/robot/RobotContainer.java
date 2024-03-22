@@ -89,8 +89,8 @@ public class RobotContainer {
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
     // new Trigger(null)
-    Constants.operatorController.a().whileTrue(m_feeder.runFeeder(0.8, -0.8, true)); //override to shoot
-    Constants.operatorController.b().whileTrue(m_feeder.runFeeder(0.8, -0.8, false)); //stage Note
+    Constants.operatorController.a().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, true), m_shooter.shootIt(65000))); //override to shoot
+    Constants.operatorController.b().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, false), m_shooter.shootIt(65000))); //stage Note
 //    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
 //    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
     Constants.operatorController.x().onTrue(m_elevator.runElevator(0.0));
@@ -189,6 +189,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Auto15SecondShoot", new Auto15SecondShootCmd(m_shooter));
     NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9));
     NamedCommands.registerCommand("AutoHalfSecondFeeder", new AutoHalfSecondFeederCmd(m_feeder));
+    NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.04));
+    NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.05));
   }
 
   /**

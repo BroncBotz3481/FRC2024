@@ -17,13 +17,13 @@ public class Auto15SecondShootCmd extends Command {
 
     @Override
     public void initialize() {
-        m_shooter.shoot(0);
+        m_shooter.stop();
         timer.start();
     }
 
     @Override
     public void execute() {
-        m_shooter.shoot(0.8);
+        m_shooter.runPID(65000);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Auto15SecondShootCmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_shooter.shoot(0);
+        m_shooter.stop();
         timer.stop();
         timer.reset();
     }
