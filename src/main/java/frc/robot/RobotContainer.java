@@ -82,33 +82,46 @@ public class RobotContainer {
 //    Constants.operatorController.rightBumper().whileTrue(superstructure.toState(superstructure.getShootState()));
 //    Constants.operatorController.leftBumper().whileTrue(superstructure.toState(SuperState.GROUND_INTAKE));
 //    Constants.operatorController.leftTrigger(0.1).whileTrue(superstructure.toState(SuperState.SOURCE_INTAKE));
-    // Manual controls
     //  new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(1)) > 0.1)
     //  .whileTrue(m_climber.setLeftSpeed(Constants.operatorController::getLeftY));
     //  new Trigger(() -> Math.abs(Constants.operatorController.getRawAxis(5)) > 0.1)
     //  .whileTrue(m_climber.setRightSpeed(Constants.operatorController::getRightY));
 
-    // new Trigger(null)
-    Constants.operatorController.a().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, true), m_shooter.shootIt(65000))); //override to shoot
-    Constants.operatorController.b().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, false), m_shooter.shootIt(65000))); //stage Note
-//    Constants.operatorController.x().whileTrue(m_elevator.lowerElevator());
-//    Constants.operatorController.y().whileTrue(m_elevator.raiseElevator());
-    Constants.operatorController.x().onTrue(m_elevator.runElevator(0.0));
-    Constants.operatorController.y().onTrue(m_elevator.runElevator(0.09));
-//    Constants.operatorController.z().onTrue(m_elevator.runElevator(0.09));
-   new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
-   new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
-    new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_elevator.runElevator(0.0));
-    Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
-    Constants.operatorController.leftBumper().whileTrue(m_shooter.shootIt(65000));
-    Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, 0, false)));
+
+
+
+
+    // Operator Controls Below
+    //Shooter and Feeder
+    Constants.operatorController.a().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, true), m_shooter.shootIt(65000))); //override to shoot High Power
+    Constants.operatorController.leftBumper().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, false), m_shooter.shootIt(65000))); //stage Note
+    Constants.operatorController.y().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(-0.8, 0.8, true), m_shooter.shootIt(65000))); //Source Intake Reverse
+    //TODO Find Correct HID for (Small Right)
+    new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_feeder.runFeeder(-0.8, 0.8, false)); //SPIT Command
+
+    //Elevator Controls
+    Constants.operatorController.rightTrigger().onTrue(m_elevator.runElevator(0.085)); //MAX ANGLE
+    Constants.operatorController.povLeft().onTrue(m_elevator.runElevator(0.06)); //Safe Zone or Far Shot Angle
+    Constants.operatorController.leftTrigger().onTrue(m_elevator.runElevator(0.03)); //Amp Shot Angle
+    Constants.operatorController.b().onTrue(m_elevator.runElevator(0.01)); //MIN Angle
+    Constants.operatorController.povRight().onTrue(m_elevator.runElevator(0.07)); //Source Angle
+
+    //Climbers
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.8));  
     Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.8));    
     Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.8));
     Constants.operatorController.povUp().whileTrue(m_climber.setBothSpeeds(-0.8));
     Constants.operatorController.povDown().whileTrue(m_climber.setBothSpeeds(0.8));
-    Constants.driverController.rightBumper().whileTrue(m_drivebase.aimAtSpeaker(1));
+
+
+
+    // new Trigger(() -> Constants.operatorController.getHID().getRawButton(7)).whileTrue(m_elevator.runElevator(0.045));
+    // new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_elevator.runElevator(0.08));
+    // new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_elevator.runElevator(0.0));
+    // Constants.operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.raiseElevator(), m_shooter.manualShoot(0.7))); //Commands.waitUntil(m_shooter::rampedUp).andThen(m_feeder.runFeeder(0.5))
+    // Constants.operatorController.leftBumper().whileTrue(m_shooter.shootIt(65000));
+    // Constants.operatorController.rightBumper().whileTrue(new ParallelCommandGroup(m_shooter.manualShoot(-0.4),m_feeder.runFeeder(-0.7, 0, false)));
 
     //OLD MANUAL COMMANDS NOT USED
     //Constants.operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_elevator.setAngle(41.5), m_shooter.manualShoot(0.3)));
@@ -151,8 +164,8 @@ public class RobotContainer {
     // TODO: Change this to follow the run/runOnce paradigm used by the Superstructure
     // Driver Controls
     Constants.driverController.a().onTrue(new InstantCommand(m_drivebase::zeroGyro));
-    Constants.driverController.x().onTrue(m_feeder.runFeederCommand(0.8, -0.8)); // TODO change this to operator controller
     Constants.driverController.b().onTrue(new InstantCommand(m_drivebase::lock));
+    Constants.driverController.rightBumper().whileTrue(m_drivebase.aimAtSpeaker(1));
     Constants.driverController.y().whileTrue(Commands.deferredProxy(() -> m_drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
     ));
