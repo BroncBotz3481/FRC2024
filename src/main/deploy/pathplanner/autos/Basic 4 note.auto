@@ -26,6 +26,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.6
+                      }
+                    },
+                    {
                       "type": "parallel",
                       "data": {
                         "commands": [
@@ -39,12 +45,6 @@
                             "type": "sequential",
                             "data": {
                               "commands": [
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 0.5
-                                  }
-                                },
                                 {
                                   "type": "named",
                                   "data": {
@@ -70,19 +70,13 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoHalfSecondFeeder"
-                      }
-                    },
-                    {
                       "type": "parallel",
                       "data": {
                         "commands": [
                           {
-                            "type": "named",
+                            "type": "path",
                             "data": {
-                              "name": "FeedNote"
+                              "pathName": "Mid To E3"
                             }
                           },
                           {
@@ -90,15 +84,15 @@
                             "data": {
                               "commands": [
                                 {
-                                  "type": "path",
+                                  "type": "named",
                                   "data": {
-                                    "pathName": "Mid To E3"
+                                    "name": "AutoHalfSecondFeeder"
                                   }
                                 },
                                 {
-                                  "type": "path",
+                                  "type": "named",
                                   "data": {
-                                    "pathName": "E3 To Mid"
+                                    "name": "FeedNote"
                                   }
                                 }
                               ]
@@ -108,9 +102,9 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "AutoHalfSecondFeeder"
+                        "pathName": "E3 To Mid"
                       }
                     },
                     {
@@ -118,9 +112,9 @@
                       "data": {
                         "commands": [
                           {
-                            "type": "named",
+                            "type": "path",
                             "data": {
-                              "name": "FeedNote"
+                              "pathName": "Mid To E1"
                             }
                           },
                           {
@@ -128,21 +122,27 @@
                             "data": {
                               "commands": [
                                 {
-                                  "type": "path",
+                                  "type": "named",
                                   "data": {
-                                    "pathName": "Mid To E1"
+                                    "name": "AutoHalfSecondFeeder"
                                   }
                                 },
                                 {
-                                  "type": "path",
+                                  "type": "named",
                                   "data": {
-                                    "pathName": "E1 To Mid"
+                                    "name": "FeedNote"
                                   }
                                 }
                               ]
                             }
                           }
                         ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "E1 To Mid"
                       }
                     },
                     {
