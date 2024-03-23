@@ -97,7 +97,7 @@ public class RobotContainer {
     Constants.operatorController.leftBumper().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(0.8, -0.8, false), m_shooter.shootIt(65000))); //stage Note
     Constants.operatorController.y().whileTrue(new ParallelCommandGroup(m_feeder.runFeeder(-0.8, 0.8, true), m_shooter.shootIt(65000))); //Source Intake Reverse
     //TODO Find Correct HID for (Small Right)
-    new Trigger(() -> Constants.operatorController.getHID().getRawButton(9)).whileTrue(m_feeder.runFeeder(-0.8, 0.8, false)); //SPIT Command
+    new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_feeder.runFeeder(-0.8, 0.8, false)); //SPIT Command
 
     //Elevator Controls
     Constants.operatorController.rightTrigger().onTrue(m_elevator.runElevator(0.085)); //MAX ANGLE
@@ -200,10 +200,10 @@ public class RobotContainer {
 
     //For Complex Autos
     NamedCommands.registerCommand("Auto15SecondShoot", new Auto15SecondShootCmd(m_shooter));
-    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9));
+    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9).withTimeout(3));
     NamedCommands.registerCommand("AutoHalfSecondFeeder", new AutoHalfSecondFeederCmd(m_feeder));
-    NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.07));
-    NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.065));
+    NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.07).withTimeout(3));
+    NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.065).withTimeout(3));
   }
 
   /**
