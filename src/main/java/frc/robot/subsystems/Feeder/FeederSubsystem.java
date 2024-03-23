@@ -76,7 +76,8 @@ public class FeederSubsystem extends SubsystemBase {
 
     public Command runFeederCommand(double fTargetSpeed, double iTargetSpeed)
     {
-        return run(() -> {setSpeed(fTargetSpeed, iTargetSpeed);}).until(this::getBeamBrakeState).andThen(runOnce(this::stopFeeder));
+        Command temp = run(() -> {setSpeed(fTargetSpeed, iTargetSpeed);}).until(this::getBeamBrakeState).andThen(runOnce(this::stopFeeder));
+        return temp.withTimeout(3);
     }
 
     // public void runFeederAuto(double fTargetSpeed, double iTargetSpeed, boolean ignoreBeambreak){
