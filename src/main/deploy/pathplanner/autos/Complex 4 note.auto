@@ -26,6 +26,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "AutoHalfSecondFeeder"
@@ -54,10 +60,41 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": null
+                                    "pathName": "E3 To Left Speaker Score"
                                   }
                                 }
                               ]
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "SetElevatorCornerShot"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoHalfSecondFeeder"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "FeedNote"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Left Speaker Score To E2"
                             }
                           },
                           {
