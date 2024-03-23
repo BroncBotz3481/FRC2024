@@ -46,8 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightLift = new CANSparkMax(Constants.ElevatorConstants.rightLiftID, CANSparkLowLevel.MotorType.kBrushless);
         leftLift.restoreFactoryDefaults();
         rightLift.restoreFactoryDefaults();
-        leftLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        rightLift.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        leftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         
         leftEncoder.setPositionOffset(0.730);
         rightEncoder.setPositionOffset(0.247);

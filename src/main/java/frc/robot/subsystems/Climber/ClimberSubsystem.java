@@ -191,7 +191,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public Command setBothSpeeds(double speed){
         return run(() ->{
-            rightClimberMotor.set(speed);
+            rightClimberMotor.set(-speed);
             leftClimberMotor.set(speed);
         });
     }

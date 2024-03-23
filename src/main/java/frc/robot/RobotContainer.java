@@ -100,17 +100,17 @@ public class RobotContainer {
     new Trigger(() -> Constants.operatorController.getHID().getRawButton(8)).whileTrue(m_feeder.runFeeder(-0.8, 0.8, false)); //SPIT Command
 
     //Elevator Controls
-    Constants.operatorController.rightTrigger().onTrue(m_elevator.runElevator(0.085)); //MAX ANGLE
+    Constants.operatorController.rightTrigger().onTrue(m_elevator.runElevator(0.09)); //MAX ANGLE
     Constants.operatorController.povLeft().onTrue(m_elevator.runElevator(0.06)); //Safe Zone or Far Shot Angle
     Constants.operatorController.leftTrigger().onTrue(m_elevator.runElevator(0.03)); //Amp Shot Angle
-    Constants.operatorController.b().onTrue(m_elevator.runElevator(0.01)); //MIN Angle
+    Constants.operatorController.b().onTrue(m_elevator.runElevator(0.0)); //MIN Angle
     Constants.operatorController.povRight().onTrue(m_elevator.runElevator(0.07)); //Source Angle
 
     //Climbers
     Constants.operatorController.axisGreaterThan(1, 0.1).whileTrue(m_climber.setLeftSpeed(0.8));    
     Constants.operatorController.axisLessThan(1, -0.1).whileTrue(m_climber.setLeftSpeed(-0.8));  
-    Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(0.8));    
-    Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(-0.8));
+    Constants.operatorController.axisGreaterThan(5, 0.1).whileTrue(m_climber.setRightSpeed(-0.8));    
+    Constants.operatorController.axisLessThan(5, -0.1).whileTrue(m_climber.setRightSpeed(0.8));
     Constants.operatorController.povUp().whileTrue(m_climber.setBothSpeeds(-0.8));
     Constants.operatorController.povDown().whileTrue(m_climber.setBothSpeeds(0.8));
 
@@ -200,7 +200,7 @@ public class RobotContainer {
 
     //For Complex Autos
     NamedCommands.registerCommand("Auto15SecondShoot", new Auto15SecondShootCmd(m_shooter));
-    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9).withTimeout(3));
+    NamedCommands.registerCommand("FeedNote", m_feeder.runFeederCommand(0.9, -0.9));
     NamedCommands.registerCommand("AutoHalfSecondFeeder", new AutoHalfSecondFeederCmd(m_feeder));
     NamedCommands.registerCommand("SetElevatorCornerShot", m_elevator.runElevator(0.07).withTimeout(3));
     NamedCommands.registerCommand("SetElevatorCenterShot", m_elevator.runElevator(0.065).withTimeout(3));
@@ -242,8 +242,8 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(Constants.driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
             () -> Constants.driverController.getRawAxis(2));
 
-    m_drivebase.setDefaultCommand(
-            !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngle);
+            m_drivebase.setDefaultCommand(
+              !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngle);
     Constants.driverController.axisGreaterThan(2, .12)
             .or(Constants.driverController.axisGreaterThan(3, .12)).whileTrue(m_drivebase.driveCommand(
                     () -> (Math.abs(Constants.driverController.getRawAxis(1)) > OperatorConstants.LEFT_Y_DEADBAND)
@@ -252,7 +252,7 @@ public class RobotContainer {
                     () -> (Math.abs(Constants.driverController.getRawAxis(0)) > OperatorConstants.LEFT_X_DEADBAND)
                             ? Constants.driverController.getRawAxis(0)
                             : 0,
-                    () -> {
+                    () -> { 
                       if (Math.abs(Constants.driverController.getRawAxis(2)) > .12) {
                         return Constants.driverController.getRawAxis(2) * .4; // CHANGE THIS CONSTANT IF YOU WANT IT TO BE FASTER OR SLOWER
                       } else if (Math.abs(Constants.driverController.getRawAxis(3)) > .12) {
